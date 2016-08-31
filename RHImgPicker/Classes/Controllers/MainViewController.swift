@@ -333,17 +333,18 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         item0.width = 10.0
         
         
-        let item1 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[0] , style: .Plain, target: self, action: Selector("clearButtonPressed:"))
+        let item1 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[0] , style: .Plain, target: self, action: #selector(clearButtonPressed(_:)))
+            
         item1.tintColor = self.settings.toolBarButtonsFontColor
         
         let item2 = UIBarButtonItem.init(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
         
-        let item3 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[1] , style: .Plain, target: self, action: Selector("albumButtonPressed:"))
+        let item3 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[1] , style: .Plain, target: self, action: #selector(albumButtonPressed(_:)))
         item3.tintColor = self.settings.toolBarButtonsFontColor
         
         let item4 = UIBarButtonItem.init(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
         
-        let item5 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[2] , style: .Done, target: self, action: Selector("doneButtonPressed:"))
+        let item5 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[2] , style: .Done, target: self, action: #selector(doneButtonPressed(_:)))
         item5.tintColor = self.settings.toolBarButtonsFontColor
         
         let item6 = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.FixedSpace , target: nil, action: nil)
@@ -368,49 +369,23 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
     
     func clearButtonPressed(sender: AnyClass) {
         
-        
-        if let sender : UIButton = sender as? UIButton {
-            
-            self.buttonsView.bringSubviewToFront(sender)
-            
-        }
-        
-        
         self.clearSelections()
       
-        
         if let delegate = self.delegateRHImgPicker {
             
             delegate.RHImgPickerDidClearAllSelectedAssets()
-            
         }
-        
-        
-        
-        
         
         
     }
     
     func albumButtonPressed(sender: AnyClass) {
         
-        if let sender : UIButton = sender as? UIButton {
-            
-            self.buttonsView.bringSubviewToFront(sender)
-            
-        }
-        
-        
         self.showAlbumSelection(!albumIsShowing)
     }
     
+    
     func doneButtonPressed(sender: AnyClass) {
-        
-        if let sender : UIButton = sender as? UIButton {
-            
-            self.buttonsView.bringSubviewToFront(sender)
-            
-        }
         
         guard let delegate = self.delegateRHImgPicker  else {
             self.dismissViewControllerAnimated(true, completion: nil)
@@ -424,10 +399,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
             delegate.RHImgPickerDidFinishPickingAssets([])
         }
         
-        
         self.dismissViewControllerAnimated(true, completion: nil)
-        
-        
         
         
     }
@@ -696,14 +668,17 @@ extension MainViewController: UINavigationControllerDelegate {
 
 extension MainViewController {
 
-    func captureScreen() -> UIImage {
-        var window: UIWindow? = UIApplication.sharedApplication().keyWindow
-        window = UIApplication.sharedApplication().windows[0] as? UIWindow
-        UIGraphicsBeginImageContextWithOptions(window!.frame.size, window!.opaque, 0.0)
-        window!.layer.renderInContext(UIGraphicsGetCurrentContext()!)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image;
+    func captureScreen() -> UIImage? {
+        if let window = UIApplication.sharedApplication().windows.first {
+            UIGraphicsBeginImageContextWithOptions(window.frame.size, window.opaque, 0.0)
+            window.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return image;
+        }
+       
+        return nil
+        
     }
 
     func setupLongPressOnPhotoCollection() {

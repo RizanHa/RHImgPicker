@@ -130,7 +130,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var maxNumberOfSelections: Int {
+    var maxNumberOfSelections: Int {
         get {
             return _maxNumberOfSelections
         }
@@ -143,7 +143,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var selectionCharacter: Character? {
+    var selectionCharacter: Character? {
         get {
             return _selectionCharacter
         }
@@ -157,7 +157,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var selectionFillColor: UIColor {
+    var selectionFillColor: UIColor {
         get {
             return _selectionFillColor
         }
@@ -169,7 +169,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var selectionStrokeColor: UIColor {
+    var selectionStrokeColor: UIColor {
         get {
             return _selectionStrokeColor
         }
@@ -181,7 +181,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var selectionShadowColor: UIColor {
+    var selectionShadowColor: UIColor {
         get {
             return _selectionShadowColor
         }
@@ -193,7 +193,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var selectionHighlightColor: UIColor {
+    var selectionHighlightColor: UIColor {
         get {
             return _selectionHighlightColor
         }
@@ -207,7 +207,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var selectionTextAttributes: [String: AnyObject] {
+    var selectionTextAttributes: [String: AnyObject] {
         get {
             return _selectionTextAttributes
         }
@@ -219,7 +219,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var cellsPerRow: (verticalSize: UIUserInterfaceSizeClass, horizontalSize: UIUserInterfaceSizeClass) -> Int {
+    var cellsPerRow: (verticalSize: UIUserInterfaceSizeClass, horizontalSize: UIUserInterfaceSizeClass) -> Int {
         get {
             return _cellsPerRow
         }
@@ -234,7 +234,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var useToolBarButtons : Bool {
+    var useToolBarButtons : Bool {
         
         get {
             return _useToolBarButtons
@@ -249,7 +249,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var toolBarButtonsFontColor : UIColor {
+    var toolBarButtonsFontColor : UIColor {
         
         get {
             return _toolBarButtonsFontColor
@@ -265,7 +265,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var toolBarButtonsBackgroundColor : UIColor {
+    var toolBarButtonsBackgroundColor : UIColor {
         
         get {
             return _toolBarButtonsBackgroundColor
@@ -283,7 +283,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var buttonColors : [UIColor] {
+    var buttonColors : [UIColor] {
         
         get {
             return _buttonColors
@@ -308,7 +308,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var buttonLabelFont : UIFont {
+    var buttonLabelFont : UIFont {
         
         get {
             return _buttonLabelFont
@@ -323,7 +323,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var buttonLabelFontColors : [UIColor] {
+    var buttonLabelFontColors : [UIColor] {
         
         get {
             return _buttonLabelFontColors
@@ -351,7 +351,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var buttonHighlightColors : [UIColor] {
+    var buttonHighlightColors : [UIColor] {
         
         get {
             return _buttonHighlightColors
@@ -380,7 +380,7 @@ extension RHSettings {
      * buttonLabelTexts : [String (lenth = 3)] 
      * default value ["Clear", "Album", "Done"]
      */
-    public var buttonLabelTexts : [String] {
+    var buttonLabelTexts : [String] {
         
         get {
             return _buttonLabelTexts
@@ -402,7 +402,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var backgroundColor: UIColor {
+    var backgroundColor: UIColor {
         get {
             return _backgroundColor
         }
@@ -415,7 +415,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var albumCellBackgroundColor: UIColor {
+    var albumCellBackgroundColor: UIColor {
         get {
             return _albumCellBackgroundColor
         }
@@ -428,7 +428,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var albumCellLabelColor: UIColor {
+    var albumCellLabelColor: UIColor {
         get {
             return _albumCellLabelColor
         }
@@ -441,7 +441,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public var albumCellAnimation: ((layer: CALayer) -> Void) {
+    var albumCellAnimation: ((layer: CALayer) -> Void) {
         get {
             return _albumCellAnimation
         }
@@ -454,7 +454,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    public func setAlbumCellAnimation ( animationBlock: ((layer: CALayer) -> Void) ) {
+    func setAlbumCellAnimation ( animationBlock: ((layer: CALayer) -> Void) ) {
     
         _albumCellAnimation = animationBlock
     }

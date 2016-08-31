@@ -128,8 +128,6 @@ final class PreviewViewController : UIViewController, UIGestureRecognizerDelegat
         // hide nav bar
         navigationController?.setNavigationBarHidden(true, animated: false)
         
-        
-        let settings = RHSettings.sharedInstance
         self.backgroundImageView?.frame = self.view.bounds
         self.imageView?.frame = self.view.bounds
         self.imageView?.backgroundColor = UIColor.clearColor()
@@ -172,25 +170,22 @@ final class PreviewViewController : UIViewController, UIGestureRecognizerDelegat
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
-        if let touch = touches.first {
-            let currentPoint = touch.locationInView(self.view)
+        
+        if (offsetPoint == CGPointZero || imgViewIsInMid() ) {
             
-     
-            if (offsetPoint == CGPointZero || imgViewIsInMid() ) {
-            
-                UIView.animateWithDuration(0.3, animations: { () -> Void in
-                     self.imageView?.center = self.view.center
-                })
-                
-            }
-            else {
-                
-                popToRootController()
-            }
-            
-            offsetPoint = CGPointZero
+            UIView.animateWithDuration(0.3, animations: { () -> Void in
+                self.imageView?.center = self.view.center
+            })
             
         }
+        else {
+            
+            popToRootController()
+        }
+        
+        offsetPoint = CGPointZero
+        
+        
         
     }
     

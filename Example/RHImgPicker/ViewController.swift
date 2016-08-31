@@ -110,13 +110,15 @@ class ViewController: UIViewController, RHImgPickerDelegate {
             imgView.frame = CGRectMake(imgSizeXY*columnIndex, imgSizeXY*rowIndex + offset, imgSizeXY, imgSizeXY)
             imgView.backgroundColor = UIColor.clearColor()
             imgView.contentMode = .ScaleAspectFit
+            imgView.layer.borderWidth = 1
+            imgView.layer.borderColor = UIColor.lightTextColor().CGColor
             self.view.addSubview(imgView)
             
             
             let lbl : UILabel = UILabel(frame: imgView.bounds)
             lbl.text = String(index+1)
             lbl.textColor = UIColor.lightTextColor()
-            lbl.frame = CGRectOffset(lbl.frame, 0, -lbl.frame.size.height*0.55 )
+            lbl.frame = CGRectOffset(lbl.frame, 0, -lbl.frame.size.height*0.6 )
             lbl.textAlignment = .Center
             imgView.addSubview(lbl)
             
