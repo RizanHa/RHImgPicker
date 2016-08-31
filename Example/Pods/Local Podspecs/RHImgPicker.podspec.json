@@ -1,0 +1,22 @@
+{
+  "name": "RHImgPicker",
+  "version": "0.1.0",
+  "summary": "A short description of RHImgPicker.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/<GITHUB_USERNAME>/RHImgPicker",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Rizan Hamza": "rizan.hamza@outlook.com"
+  },
+  "source": {
+    "git": "https://github.com/<GITHUB_USERNAME>/RHImgPicker.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "RHImgPicker/Classes/**/*"
+}

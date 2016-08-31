@@ -1,0 +1,16 @@
+PODS:
+  - RHImgPicker (0.1.0)
+
+DEPENDENCIES:
+  - RHImgPicker (from `../`)
+
+EXTERNAL SOURCES:
+  RHImgPicker:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  RHImgPicker: e1775577c71810f56e53452c79bebe7fcf639e63
+
+PODFILE CHECKSUM: 775733f7725025ed51cd144f3347eaedc31fa2d7
+
+COCOAPODS: 1.0.1
