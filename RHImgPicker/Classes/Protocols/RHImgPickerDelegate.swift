@@ -30,16 +30,38 @@
 import Foundation
 import Photos
 
+
+/**
+ 
+ 
+ Note that this protocol tells the delegate synchronously.
+ */
 public protocol RHImgPickerDelegate {
     
     
-    func RHImgPickerDidFinishPickingAssets(assets: [PHAsset])
     
+    /**
+        Tells the delegate that the selection process is Finish and provides the selected images in the pick order.
+     */
+    func RHImgPickerDidFinishPickingAssets(_ assets: [PHAsset])
+    
+    
+    /**
+     Tells the delegate that RHImgPicker did clear all selection (did removed all selected images from the selection)
+     */
     func RHImgPickerDidClearAllSelectedAssets()
     
-    func RHImgPickerDidSelectAsset(assets: PHAsset)
     
-    func RHImgPickerDidDeselectAsset(assets: PHAsset)
+    /**
+     Tells the delegate that an Asset did selected and provides the selected asset.
+     */
+    func RHImgPickerDidSelectAsset(_ asset: PHAsset)
+    
+    
+    /**
+     Tells the delegate that an Asset did deselected and provides the deselected asset.
+     */
+    func RHImgPickerDidDeselectAsset(_ asset: PHAsset)
     
     
     

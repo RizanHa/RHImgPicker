@@ -32,33 +32,33 @@ import Photos
 
 
 
-public class RHImgPickerViewController: UINavigationController {
+open class RHImgPickerViewController: UINavigationController {
 
     /**
      Bundle.
      */
-    static let bundle: NSBundle = NSBundle.init(forClass: RHImgPickerViewController.self)
+    static let bundle: Bundle = Bundle.init(for: RHImgPickerViewController.self)
     
     
     
     /**
      authorization Photos.
      */
-    class func authorize(status: PHAuthorizationStatus = PHPhotoLibrary.authorizationStatus(), fromViewController: UIViewController, completion: (authorized: Bool) -> Void) {
+    class func authorize(_ status: PHAuthorizationStatus = PHPhotoLibrary.authorizationStatus(), fromViewController: UIViewController, completion: @escaping (_ authorized: Bool) -> Void) {
         switch status {
-        case .Authorized:
+        case .authorized:
             // We are authorized. Run block
-            completion(authorized: true)
-        case .NotDetermined:
+            completion(true)
+        case .notDetermined:
             // Ask user for permission
             PHPhotoLibrary.requestAuthorization({ (status) -> Void in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     self.authorize(status, fromViewController: fromViewController, completion: completion)
                 })
             })
         default: ()
-        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            completion(authorized: false)
+        DispatchQueue.main.async(execute: { () -> Void in
+            completion(false)
         })
         }
     }
@@ -74,7 +74,7 @@ public class RHImgPickerViewController: UINavigationController {
     }
     
     /**
-     https://www.youtube.com/watch?v=dQw4w9WgXcQ
+    ...
      */
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -88,60 +88,51 @@ public class RHImgPickerViewController: UINavigationController {
     /**
      Object that keeps settings for the picker.
      */
-    public var settings: RHImgPickerSettings = RHSettings.sharedInstance
+    open var settings: RHImgPickerSettings = RHSettings.sharedInstance
 
     
     
-    /**
-     Done button.
-     */
-    public var doneButton: UIButton?
-    public var doneButtonLabel : UILabel?
-
-    /**
-     Cancel button
-     */
-    public var clearButton: UIButton?
-    public var clearButtonLabel : UILabel?
-    
-    
-    /**
-     Album button
-     */
-    public var albumButton: UIButton?
-    public var albumButtonLabel : UILabel?
-    
-    
-    
-    
+   
     
     
     
     /**
      RHImgPickerDelegate protocol.
      */
-    public var delegateRImgPicker : RHImgPickerDelegate?
+    open var delegateRImgPicker : RHImgPickerDelegate?
     
     /**
      Default selections
      */
-    public var defaultSelections: PHFetchResult?
+    open var defaultSelections: PHFetchResult<AnyObject>?
     
     
     /**
      Fetch results.
      */
-    public lazy var fetchResults: [PHFetchResult] = {
+    open lazy var fetchResults: [PHFetchResult<AnyObject>] = { () -> [PHFetchResult<AnyObject>] in
         
         let fetchOptions = PHFetchOptions()
+    
         
-        // Camera roll fetch result
-        let cameraRollResult = PHAssetCollection.fetchAssetCollectionsWithType(.SmartAlbum, subtype: .SmartAlbumUserLibrary, options: fetchOptions)
+        guard
+            // Camera roll fetch result
+            let cameraRollResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .smartAlbumUserLibrary, options: fetchOptions) as? PHFetchResult<AnyObject>,
+            
+            // Albums fetch result
+            let albumResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions) as? PHFetchResult<AnyObject>
         
-        // Albums fetch result
-        let albumResult = PHAssetCollection.fetchAssetCollectionsWithType(.Album, subtype: .Any, options: fetchOptions)
+            
+            
+        else { return [] }
+
         
-        return [cameraRollResult, albumResult]
+         
+        
+        return [cameraRollResult , albumResult]
+        
+        
+        
     }()
     
 
@@ -154,79 +145,11 @@ public class RHImgPickerViewController: UINavigationController {
      */
     lazy var mainViewController: MainViewController = {
         
-        
         let vc = MainViewController(fetchResults: self.fetchResults,
                                       defaultSelections: self.defaultSelections,
                                       settings: self.settings,
                                       delegate: self.delegateRImgPicker)
         
-
-        
-        if !self.settings.useToolBarButtons {
-            
-            if self.clearButton == nil {
-                self.clearButton = UIButton.init(type: UIButtonType.Custom)
-            }
-            if self.albumButton == nil {
-                self.albumButton = UIButton.init(type: UIButtonType.Custom)
-            }
-            if self.doneButton == nil {
-                self.doneButton = UIButton.init(type: UIButtonType.Custom)
-            }
-            
-            if self.clearButtonLabel == nil {
-                self.clearButtonLabel  = UILabel()
-            }
-            if self.albumButtonLabel == nil {
-                self.albumButtonLabel  = UILabel()
-            }
-            if self.doneButtonLabel == nil {
-                self.doneButtonLabel  = UILabel()
-            }
-            
-            
-            
-            let buttonLbls = [self.clearButtonLabel,self.albumButtonLabel,self.doneButtonLabel ]
-            let buttons = [self.clearButton ,self.albumButton,self.doneButton  ]
-            
-            var index = 0
-            for button in buttons {
-                
-                if let button = button {
-                    
-                    button.backgroundColor = self.settings.buttonColors[index]
-                    button.tag = RHBT_TAG
-                    index = index + 1
-                }
-                
-            }
-            
-            index = 0
-            for buttonLbl in buttonLbls {
-                
-                if let buttonLbl = buttonLbl {
-                    
-                    buttonLbl.text = self.settings.buttonLabelTexts[index]
-                    buttonLbl.font = self.settings.buttonLabelFont
-                    buttonLbl.textColor = self.settings.buttonLabelFontColors[index]
-                    buttonLbl.backgroundColor = self.settings.buttonHighlightColors[index].colorWithAlphaComponent(0.0)
-                    buttonLbl.textAlignment = .Center
-                    buttonLbl.numberOfLines = 1
-                    buttonLbl.tag = RHBT_TAG
-                    index = index + 1
-                }
-            }
-            
-            self.clearButton!.addSubview(self.clearButtonLabel!)
-            self.albumButton!.addSubview(self.albumButtonLabel!)
-            self.doneButton!.addSubview(self.doneButtonLabel!)
-            
-            vc.doneBarButton = self.doneButton!
-            vc.clearBarButton =  self.clearButton!
-            vc.albumButton = self.albumButton!
-            
-        }
-    
         return vc
     }()
     
@@ -235,37 +158,32 @@ public class RHImgPickerViewController: UINavigationController {
     
     
     var mainViewControllerDidLoad : Bool = false
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = self.settings.backgroundColor
         
         // Make sure we really are authorized
-        if PHPhotoLibrary.authorizationStatus() == .Authorized {
+        if PHPhotoLibrary.authorizationStatus() == .authorized {
             mainViewControllerDidLoad = true
             setViewControllers([mainViewController], animated: false)
         }
 
     }
 
-    override public func didReceiveMemoryWarning() {
+    override open func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
 
     }
     
 
     
-    
-    public func clearSelection() {
+    // clear selections from the module
+    open func clearSelection() {
     
         if mainViewControllerDidLoad {
-            
             mainViewController.clearSelections()
-            
         }
-        
-    
-    
     }
     
     

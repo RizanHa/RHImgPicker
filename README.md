@@ -7,6 +7,10 @@
 
 ## Example
 
+![alt tag](https://github.com/RizanHa/RHImgPicker/blob/master/gif_RHImgPicker_01.gif) ![alt tag](https://github.com/RizanHa/RHImgPicker/blob/master/gif_RHImgPicker_02.gif) ![alt tag](https://github.com/RizanHa/RHImgPicker/blob/master/gif_RHImgPicker_03.gif)
+
+
+
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements

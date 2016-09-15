@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-//  Settings.swift
+//  RHSettings.swift
 //  Pods
 //
 //  Created by rizan on 26/08/2016.
@@ -45,54 +45,48 @@ final class RHSettings :  RHImgPickerSettings {
         return sharedKraken
     }
 
-    private init() {
+    fileprivate init() {
     
     
     }
     
     
-    private var _maxNumberOfSelections: Int = Int.max - 1
-    private var _selectionCharacter: Character? = nil
+    fileprivate var _maxNumberOfSelections: Int = Int.max - 1
+    fileprivate var _selectionCharacter: Character? = nil
     
     
-    private var _selectionFillColor: UIColor = UIColor.redColor()
-    private var _selectionStrokeColor: UIColor = UIColor.whiteColor()
-    private var _selectionShadowColor: UIColor = UIColor.blackColor()
-    private var _selectionHighlightColor: UIColor = UIColor.whiteColor()
+    fileprivate var _selectionFillColor: UIColor = UIColor.red
+    fileprivate var _selectionStrokeColor: UIColor = UIColor.white
+    fileprivate var _selectionShadowColor: UIColor = UIColor.black
+    fileprivate var _selectionHighlightColor: UIColor = UIColor.white
     
     
     
-    private var _useToolBarButtons: Bool = true
-    private var _toolBarButtonsBackgroundColor: UIColor =  UIColor.darkGrayColor()
-    private var _toolBarButtonsFontColor: UIColor =  UIColor.lightTextColor()
+    fileprivate var _useToolBarButtons: Bool = true
+    fileprivate var _toolBarButtonsBackgroundColor: UIColor =  UIColor.darkGray
+    fileprivate var _toolBarButtonsFontColor: UIColor =  UIColor.lightText
     
-    private var _buttonLabelFont: UIFont = UIFont.systemFontOfSize(25)
+    fileprivate var _buttonLabelTexts: [String] = ["Clear", "Album", "Done"]
     
-    private var _buttonColors: [UIColor] = [ UIColor.redColor(), UIColor.yellowColor(),UIColor.blueColor()]
-    private var _buttonLabelFontColors: [UIColor] =  [UIColor.whiteColor(),UIColor.darkTextColor(), UIColor.whiteColor()]
-    private var _buttonHighlightColors: [UIColor] =  [UIColor.whiteColor(),UIColor.whiteColor(), UIColor.whiteColor()]
-    private var _buttonLabelTexts: [String] = ["Clear", "Album", "Done"]
-    
-    
-    private var _selectionTextAttributes: [String: AnyObject] = {
+    fileprivate var _selectionTextAttributes: [String: AnyObject] = {
         let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineBreakMode = .ByTruncatingTail
-        paragraphStyle.alignment = .Center
+        paragraphStyle.lineBreakMode = .byTruncatingTail
+        paragraphStyle.alignment = .center
         return [
-            NSFontAttributeName: UIFont.boldSystemFontOfSize(10.0),
+            NSFontAttributeName: UIFont.boldSystemFont(ofSize: 10.0),
             NSParagraphStyleAttributeName: paragraphStyle,
-            NSForegroundColorAttributeName: UIColor.whiteColor()
+            NSForegroundColorAttributeName: UIColor.white
         ]
     }()
     
     
-    var _cellsPerRow: (verticalSize: UIUserInterfaceSizeClass, horizontalSize: UIUserInterfaceSizeClass) -> Int = {(verticalSize: UIUserInterfaceSizeClass, horizontalSize: UIUserInterfaceSizeClass) -> Int in
+    var _cellsPerRow: (_ verticalSize: UIUserInterfaceSizeClass, _ horizontalSize: UIUserInterfaceSizeClass) -> Int = {(verticalSize: UIUserInterfaceSizeClass, horizontalSize: UIUserInterfaceSizeClass) -> Int in
         switch (verticalSize, horizontalSize) {
-        case (.Compact, .Regular): // iPhone5-6 portrait
+        case (.compact, .regular): // iPhone5-6 portrait
             return 3
-        case (.Compact, .Compact): // iPhone5-6 landscape
+        case (.compact, .compact): // iPhone5-6 landscape
             return 5
-        case (.Regular, .Regular): // iPad portrait/landscape
+        case (.regular, .regular): // iPad portrait/landscape
             return 7
         default:
             return 3
@@ -100,19 +94,19 @@ final class RHSettings :  RHImgPickerSettings {
     }
     
     
-    private var _backgroundColor: UIColor = UIColor.darkGrayColor()
+    fileprivate var _backgroundColor: UIColor = UIColor.darkGray
     
-    private var _albumCellBackgroundColor: UIColor = UIColor.lightGrayColor()
+    fileprivate var _albumCellBackgroundColor: UIColor = UIColor.lightGray
     
-    private var _albumCellLabelColor: UIColor = UIColor.darkGrayColor()
-    
-    
+    fileprivate var _albumCellLabelColor: UIColor = UIColor.darkGray
     
     
-    private var _albumCellAnimation: ((layer: CALayer) -> Void) = { layer in
+    
+    
+    fileprivate var _albumCellAnimation: ((_ layer: CALayer) -> Void) = { layer in
        
         layer.opacity = 0
-        UIView.animateWithDuration(0.5, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             layer.opacity = 1
         })
     }
@@ -219,7 +213,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    var cellsPerRow: (verticalSize: UIUserInterfaceSizeClass, horizontalSize: UIUserInterfaceSizeClass) -> Int {
+    var cellsPerRow: (_ verticalSize: UIUserInterfaceSizeClass, _ horizontalSize: UIUserInterfaceSizeClass) -> Int {
         get {
             return _cellsPerRow
         }
@@ -277,100 +271,6 @@ extension RHSettings {
         
     }
     
-    
-    
-    
-    /**
-     See RHImgPicketSettings for documentation
-     */
-    var buttonColors : [UIColor] {
-        
-        get {
-            return _buttonColors
-        }
-        set {
-            
-            if newValue.count == 3 {
-                
-                _buttonColors = newValue
-            }
-            else {
-                
-                logInvalidArrayLenthFor( "buttonColors" , type :"UIColor", lenth: 3)
-            }
-            
-        }
-        
-        
-    }
-    
-    
-    /**
-     See RHImgPicketSettings for documentation
-     */
-    var buttonLabelFont : UIFont {
-        
-        get {
-            return _buttonLabelFont
-        }
-        set {
-            _buttonLabelFont = newValue
-        }
-        
-        
-    }
-    
-    /**
-     See RHImgPicketSettings for documentation
-     */
-    var buttonLabelFontColors : [UIColor] {
-        
-        get {
-            return _buttonLabelFontColors
-        }
-        set {
-            
-            if newValue.count == 3 {
-                
-                _buttonLabelFontColors = newValue
-            }
-            else {
-                
-               logInvalidArrayLenthFor( "buttonLabelFontColors" , type :"UIColor", lenth: 3)
-            }
-            
-        }
-        
-        
-    }
-    
-    
-    
-    
-    
-    /**
-     See RHImgPicketSettings for documentation
-     */
-    var buttonHighlightColors : [UIColor] {
-        
-        get {
-            return _buttonHighlightColors
-        }
-        set {
-            
-            if newValue.count == 3 {
-                
-                _buttonHighlightColors = newValue
-            }
-            else {
-                
-                logInvalidArrayLenthFor( "buttonHighlightColors" , type :"UIColor", lenth: 3)
-            }
-            
-        }
-        
-        
-    }
     
     
     
@@ -441,7 +341,7 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    var albumCellAnimation: ((layer: CALayer) -> Void) {
+    var albumCellAnimation: ((_ layer: CALayer) -> Void) {
         get {
             return _albumCellAnimation
         }
@@ -454,13 +354,13 @@ extension RHSettings {
     /**
      See RHImgPicketSettings for documentation
      */
-    func setAlbumCellAnimation ( animationBlock: ((layer: CALayer) -> Void) ) {
+    func setAlbumCellAnimation ( _ animationBlock: @escaping ((_ layer: CALayer) -> Void) ) {
     
         _albumCellAnimation = animationBlock
     }
     
     
-    private func logInvalidArrayLenthFor(property : String  , type : String ,  lenth : Int) {
+    fileprivate func logInvalidArrayLenthFor(_ property : String  , type : String ,  lenth : Int) {
     
         print("ERROR : cannot set value for property  -->  [\(property)]. must be --> { [\(type) (lenth = \(lenth) )] }.")
     

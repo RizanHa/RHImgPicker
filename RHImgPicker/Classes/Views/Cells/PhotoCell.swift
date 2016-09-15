@@ -49,57 +49,27 @@ class PhotoCell: UICollectionViewCell {
     
     //MARK: - Setup
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        ////fatalError("init(coder:) has not been implemented")
-    }
-
-    
     var imageView: UIImageView = UIImageView()
     var selectionOverlayView: UIView = UIView()
     var selectionView: SelectionView = SelectionView()
     
     
-    private var cellDidLoad : Bool = false
-    
-    func setup() {
-    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
-        let frame : CGRect = self.frame
+        self.imageView.contentMode = .scaleAspectFill
         
-        let sizeSelectionViewXY = self.frame.size.height*0.35
-        imageView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height)
-        selectionOverlayView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height)
-        selectionView.frame = CGRectMake(frame.size.width -  sizeSelectionViewXY*1.15, frame.size.height - sizeSelectionViewXY*1.15 ,sizeSelectionViewXY ,sizeSelectionViewXY )
-     
+        self.selectionView.backgroundColor = UIColor.clear
+        self.selectionOverlayView.backgroundColor = RHSettings.sharedInstance.selectionHighlightColor
         
         
-        
-        if cellDidLoad {
-            return
-        }
-        cellDidLoad = true
-        
-        
-       
-        
-        
-        imageView.contentMode = .ScaleAspectFill
-   
-        selectionView.backgroundColor = UIColor.clearColor()
-        
-        selectionOverlayView.backgroundColor = RHSettings.sharedInstance.selectionHighlightColor
         self.selectionOverlayView.alpha = 0.0
         
         
-        imageView.clipsToBounds = true
-        selectionOverlayView.clipsToBounds = true
-        selectionView.clipsToBounds = true
         self.clipsToBounds = true
+        self.imageView.clipsToBounds = true
+        self.selectionOverlayView.clipsToBounds = true
+        self.selectionView.clipsToBounds = true
         
         
         self.addSubview(imageView)
@@ -108,14 +78,47 @@ class PhotoCell: UICollectionViewCell {
         
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
+    }
+
+
+  
     
+    
+    
+    func layoutCell() {
+        
+        let frame : CGRect = self.frame
+        let sizeSelectionViewXY = self.frame.size.height*0.35
+        
+        self.imageView.frame = CGRect(x: 0,
+                                      y: 0,
+                                      width: frame.size.width,
+                                      height: frame.size.height)
+        
+        self.selectionOverlayView.frame = CGRect(x: 0,
+                                                 y: 0,
+                                                 width: frame.size.width,
+                                                 height: frame.size.height)
+        
+        self.selectionView.frame = CGRect(x: frame.size.width -  sizeSelectionViewXY*1.15,
+                                          y: frame.size.height - sizeSelectionViewXY*1.15 ,
+                                          width: sizeSelectionViewXY ,
+                                          height: sizeSelectionViewXY )
+        
+        
+        
+        
+    }
     
     
     
     //MARK: -
     
     
-    func updata(index : Int) {
+    func updata(_ index : Int) {
     
         self.selectionString = String(index)
         
@@ -135,41 +138,44 @@ class PhotoCell: UICollectionViewCell {
         }
     }
     
-    override var selected: Bool {
+    override var isSelected: Bool {
         get {
-            return super.selected
+            return super.isSelected
         }
         
         set {
-            let hasChanged = selected != newValue
-            super.selected = newValue
+            let hasChanged = isSelected != newValue
+            super.isSelected = newValue
             
-            if UIView.areAnimationsEnabled() && hasChanged {
-                UIView.animateWithDuration(NSTimeInterval(0.1), animations: { () -> Void in
+            if UIView.areAnimationsEnabled && hasChanged {
+                UIView.animate(withDuration: TimeInterval(0.1), animations: { () -> Void in
                     // Set alpha for views
                     self.updateAlpha(newValue)
                     
                     // Scale all views down a little
-                    self.transform = CGAffineTransformMakeScale(0.95, 0.95)
-                }) { (finished: Bool) -> Void in
-                    UIView.animateWithDuration(NSTimeInterval(0.1), animations: { () -> Void in
+                    self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+                }, completion: { (finished: Bool) -> Void in
+                    UIView.animate(withDuration: TimeInterval(0.1), animations: { () -> Void in
                         // And then scale them back upp again to give a bounce effect
-                        self.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                        self.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
                         }, completion: nil)
-                }
+                }) 
             } else {
                 updateAlpha(newValue)
             }
         }
     }
     
-    private func updateAlpha(selected: Bool) {
+    fileprivate func updateAlpha(_ selected: Bool) {
         if selected == true {
             self.selectionView.alpha = 1.0
             self.selectionOverlayView.alpha = 0.3
+            
+            
         } else {
             self.selectionView.alpha = 0.0
             self.selectionOverlayView.alpha = 0.0
+            
         }
     }
 
@@ -201,7 +207,7 @@ class PhotoCell: UICollectionViewCell {
     }
     
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
         let settings: RHImgPickerSettings = RHSettings.sharedInstance
         
@@ -218,26 +224,26 @@ class PhotoCell: UICollectionViewCell {
         let checkmarkFrame = bounds;
         
         //// Subframes
-        let group = CGRect(x: CGRectGetMinX(checkmarkFrame) + 3, y: CGRectGetMinY(checkmarkFrame) + 3, width: CGRectGetWidth(checkmarkFrame) - 6, height: CGRectGetHeight(checkmarkFrame) - 6)
+        let group = CGRect(x: checkmarkFrame.minX + 3, y: checkmarkFrame.minY + 3, width: checkmarkFrame.width - 6, height: checkmarkFrame.height - 6)
         
         //// CheckedOval Drawing
-        let checkedOvalPath = UIBezierPath(ovalInRect: CGRectMake(CGRectGetMinX(group) + floor(CGRectGetWidth(group) * 0.0 + 0.5), CGRectGetMinY(group) + floor(CGRectGetHeight(group) * 0.0 + 0.5), floor(CGRectGetWidth(group) * 1.0 + 0.5) - floor(CGRectGetWidth(group) * 0.0 + 0.5), floor(CGRectGetHeight(group) * 1.0 + 0.5) - floor(CGRectGetHeight(group) * 0.0 + 0.5)))
-        CGContextSaveGState(context)
-        CGContextSetShadowWithColor(context, shadow2Offset, shadow2BlurRadius, settings.selectionShadowColor.CGColor)
+        let checkedOvalPath = UIBezierPath(ovalIn: CGRect(x: group.minX + floor(group.width * 0.0 + 0.5), y: group.minY + floor(group.height * 0.0 + 0.5), width: floor(group.width * 1.0 + 0.5) - floor(group.width * 0.0 + 0.5), height: floor(group.height * 1.0 + 0.5) - floor(group.height * 0.0 + 0.5)))
+        context?.saveGState()
+        context?.setShadow(offset: shadow2Offset, blur: shadow2BlurRadius, color: settings.selectionShadowColor.cgColor)
         settings.selectionFillColor.setFill()
         checkedOvalPath.fill()
-        CGContextRestoreGState(context)
+        context?.restoreGState()
         
         settings.selectionStrokeColor.setStroke()
         checkedOvalPath.lineWidth = 1
         checkedOvalPath.stroke()
         
         
-        CGContextSetFillColorWithColor(context, UIColor.whiteColor().CGColor)
+        context?.setFillColor(UIColor.white.cgColor)
         
         //// Check mark for single assets
         if (settings.maxNumberOfSelections == 1) {
-            CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().CGColor)
+            context?.setStrokeColor(UIColor.white.cgColor)
             
             let pixelSize = rect.size.height / 8
             let offsetX = pixelSize*1.5
@@ -245,20 +251,20 @@ class PhotoCell: UICollectionViewCell {
             
             
             let checkPath = UIBezierPath()
-            checkPath.moveToPoint(CGPoint(x: offsetX + 1*pixelSize, y: offsetY + 3*pixelSize))
-            checkPath.addLineToPoint(CGPoint(x: offsetX + 2*pixelSize, y: offsetY + 4*pixelSize))
-            checkPath.addLineToPoint(CGPoint(x: offsetX + 4*pixelSize, y: offsetY + 2*pixelSize))
+            checkPath.move(to: CGPoint(x: offsetX + 1*pixelSize, y: offsetY + 3*pixelSize))
+            checkPath.addLine(to: CGPoint(x: offsetX + 2*pixelSize, y: offsetY + 4*pixelSize))
+            checkPath.addLine(to: CGPoint(x: offsetX + 4*pixelSize, y: offsetY + 2*pixelSize))
             checkPath.lineWidth = pixelSize*1.25
             checkPath.stroke()
             return;
         }
         
         //// Bezier Drawing (Picture Number)
-        let size = selectionString.sizeWithAttributes(settings.selectionTextAttributes)
+        let size = selectionString.size(attributes: settings.selectionTextAttributes)
         
-        selectionString.drawInRect(CGRectMake(CGRectGetMidX(checkmarkFrame) - size.width / 2.0,
-            CGRectGetMidY(checkmarkFrame) - size.height / 2.0,
-            size.width,
-            size.height), withAttributes: settings.selectionTextAttributes)
+        selectionString.draw(in: CGRect(x: checkmarkFrame.midX - size.width / 2.0,
+            y: checkmarkFrame.midY - size.height / 2.0,
+            width: size.width,
+            height: size.height), withAttributes: settings.selectionTextAttributes)
     }
 }

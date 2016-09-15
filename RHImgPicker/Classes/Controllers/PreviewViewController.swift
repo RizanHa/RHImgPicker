@@ -33,28 +33,28 @@ import UIKit
 final class PreviewViewController : UIViewController, UIGestureRecognizerDelegate {
     var imageView: UIImageView?
 
-    private var background = false
-    var backgroundColor : UIColor = UIColor.blackColor()
+    fileprivate var background = false
+    var backgroundColor : UIColor = UIColor.black
     
     var backgroundImageView : UIImageView?
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
-        self.view.backgroundColor = UIColor.clearColor()
+        self.view.backgroundColor = UIColor.clear
         
         backgroundImageView = UIImageView(frame: view.bounds)
-        backgroundImageView?.contentMode = .ScaleAspectFit
-        backgroundImageView?.backgroundColor = UIColor.clearColor()
-        backgroundImageView?.blurImage(.Dark)
-        backgroundImageView?.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        backgroundImageView?.contentMode = .scaleAspectFit
+        backgroundImageView?.backgroundColor = UIColor.clear
+        backgroundImageView?.blurImage(.dark)
+        backgroundImageView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.view.addSubview(backgroundImageView!)
         
         
         
         imageView = UIImageView(frame: view.bounds)
-        imageView?.contentMode = .ScaleAspectFit
-        imageView?.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        imageView?.contentMode = .scaleAspectFit
+        imageView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         view.addSubview(imageView!)
 
         
@@ -79,14 +79,14 @@ final class PreviewViewController : UIViewController, UIGestureRecognizerDelegat
 
     func popToRootController() {
     
-        self.navigationController?.popToRootViewControllerAnimated(true)
+        self.navigationController?.popToRootViewController(animated: true)
     
     }
     
     
     func toggleBackground() {
         background = !background
-        UIView.animateWithDuration(0.3, animations: { () -> Void in
+        UIView.animate(withDuration: 0.3, animations: { () -> Void in
             self.toggleBackgroundColor()
         })
     }
@@ -106,9 +106,9 @@ final class PreviewViewController : UIViewController, UIGestureRecognizerDelegat
         let aColor: UIColor
 
         if self.background {
-            aColor = UIColor.blackColor()
+            aColor = UIColor.black
         } else {
-            aColor = UIColor.clearColor()
+            aColor = UIColor.clear
         }
         
         imageView.backgroundColor = aColor
@@ -117,12 +117,12 @@ final class PreviewViewController : UIViewController, UIGestureRecognizerDelegat
         
     }
     
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
         
         // hide nav bar
@@ -130,33 +130,33 @@ final class PreviewViewController : UIViewController, UIGestureRecognizerDelegat
         
         self.backgroundImageView?.frame = self.view.bounds
         self.imageView?.frame = self.view.bounds
-        self.imageView?.backgroundColor = UIColor.clearColor()
-        offsetPoint = CGPointZero
+        self.imageView?.backgroundColor = UIColor.clear
+        offsetPoint = CGPoint.zero
         
         
     }
     
     
-    private var offsetPoint : CGPoint = CGPointZero
+    fileprivate var offsetPoint : CGPoint = CGPoint.zero
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         if let touch = touches.first {
-            let currentPoint = touch.locationInView(self.view)
+            let currentPoint = touch.location(in: self.view)
            
             
-            if offsetPoint == CGPointZero {
+            if offsetPoint == CGPoint.zero {
                 
                 
-                offsetPoint = CGPointMake((self.imageView?.center.x)! -  currentPoint.x,  (self.imageView?.center.y)! - currentPoint.y )
+                offsetPoint = CGPoint(x: (self.imageView?.center.x)! -  currentPoint.x,  y: (self.imageView?.center.y)! - currentPoint.y )
                 background = false
-                self.imageView?.backgroundColor = UIColor.clearColor()
+                self.imageView?.backgroundColor = UIColor.clear
                 
             }
             else {
             
                 
-                self.imageView?.center = CGPointMake(currentPoint.x + offsetPoint.x, currentPoint.y + offsetPoint.y)
+                self.imageView?.center = CGPoint(x: currentPoint.x + offsetPoint.x, y: currentPoint.y + offsetPoint.y)
             
             }
             
@@ -168,12 +168,12 @@ final class PreviewViewController : UIViewController, UIGestureRecognizerDelegat
     
     
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         
-        if (offsetPoint == CGPointZero || imgViewIsInMid() ) {
+        if (offsetPoint == CGPoint.zero || imgViewIsInMid() ) {
             
-            UIView.animateWithDuration(0.3, animations: { () -> Void in
+            UIView.animate(withDuration: 0.3, animations: { () -> Void in
                 self.imageView?.center = self.view.center
             })
             
@@ -183,17 +183,17 @@ final class PreviewViewController : UIViewController, UIGestureRecognizerDelegat
             popToRootController()
         }
         
-        offsetPoint = CGPointZero
+        offsetPoint = CGPoint.zero
         
         
         
     }
     
-    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         
         self.imageView?.center = self.view.center
-        offsetPoint = CGPointZero
+        offsetPoint = CGPoint.zero
         
         
     }
@@ -201,7 +201,7 @@ final class PreviewViewController : UIViewController, UIGestureRecognizerDelegat
     
     
     
-    private func imgViewIsInMid() -> Bool {
+    fileprivate func imgViewIsInMid() -> Bool {
         guard let imageView = self.imageView else {
             return false
         }

@@ -43,14 +43,14 @@ import Photos
 class AlbumTableView: UITableView, UITableViewDelegate {
 
    
-    //MARK: - Setup
+    //MARK: - Setup AlbumTableView
     
     var albumTableViewDelegate : AlbumTableViewDelegate?
     var albumsDataSource: AlbumTableViewDataSource?
     
     var lastSelectedAlbum : String?
     
-    func setup(frame : CGRect, albumsDataSource: AlbumTableViewDataSource) {
+    func setup(_ frame : CGRect, albumsDataSource: AlbumTableViewDataSource) {
     
         
         
@@ -67,7 +67,7 @@ class AlbumTableView: UITableView, UITableViewDelegate {
 
         self.allowsSelection = true
         self.allowsMultipleSelection = false
-        self.separatorStyle = .None
+        self.separatorStyle = .none
         
         self.delegate = self
         
@@ -84,11 +84,11 @@ class AlbumTableView: UITableView, UITableViewDelegate {
     
     //MARK: - UITableViewDelegate
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard
             let albumTableViewDelegate = self.albumTableViewDelegate ,
             let albumsDataSource = self.albumsDataSource ,
-            let album = albumsDataSource.fetchResults[indexPath.section][indexPath.row] as? PHAssetCollection
+            let album = albumsDataSource.fetchResults[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row] as? PHAssetCollection
             
         else {
             return
@@ -113,24 +113,24 @@ class AlbumTableView: UITableView, UITableViewDelegate {
     }
     
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return AlbumCell.HEIGHT
     }
     
     
-    func tableView(tableView: UITableView, shouldHighlightRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard let albumCell : AlbumCell = cell as? AlbumCell , let animationBlock = self.albumsDataSource?.settings?.albumCellAnimation else { return }
         
-        animationBlock(layer: albumCell.layer)
+        animationBlock(albumCell.layer)
         
     }
     
 
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
         return 0
         
@@ -149,7 +149,7 @@ class AlbumTableView: UITableView, UITableViewDelegate {
 protocol AlbumTableViewDelegate {
     
  
-    func albumTableViewDidSelect(album : PHAssetCollection)
+    func albumTableViewDidSelect(_ album : PHAssetCollection)
     func albumTableViewDidSelectTheSameAlbum()
     
 }

@@ -62,27 +62,6 @@ public protocol RHImgPickerSettings {
     var selectionHighlightColor: UIColor { get set }
     
     
-    /**
-     Button Label Font
-     */
-    var buttonColors: [UIColor] { get set }
-    
-    /**
-     Button Label Font
-     */
-    var buttonLabelFont: UIFont { get set }
-    
-    /**
-     Button Label Font Color
-     */
-    var buttonLabelFontColors: [UIColor] { get set }
-    
-    /**
-     Button Highlight Color
-     */
-    var buttonHighlightColors: [UIColor] { get set }
-   
-    
     
     /**
       * Button Label Texts. 
@@ -92,11 +71,6 @@ public protocol RHImgPickerSettings {
     var buttonLabelTexts: [String] { get set }
     
     
-    
-    /**
-     Tool Bar Buttons instat UIButtons
-     */
-    var useToolBarButtons: Bool { get set }
     
     /**
      Tool Bar Buttons Background Color
@@ -123,7 +97,7 @@ public protocol RHImgPickerSettings {
     /**
      Return how many cells per row you want to show for the given size classes
      */
-    var cellsPerRow: (verticalSize: UIUserInterfaceSizeClass, horizontalSize: UIUserInterfaceSizeClass) -> Int { get set }
+    var cellsPerRow: (_ verticalSize: UIUserInterfaceSizeClass, _ horizontalSize: UIUserInterfaceSizeClass) -> Int { get set }
     
     
     
@@ -147,12 +121,12 @@ public protocol RHImgPickerSettings {
     /**
      Album Cell Animation
      */
-    var albumCellAnimation: ((layer: CALayer) -> Void) { get set }
+    var albumCellAnimation: ((_ layer: CALayer) -> Void) { get set }
     
     /**
      set Album Cell Animation
      */
-    func setAlbumCellAnimation ( animationBlock: ((layer: CALayer) -> Void) )
+    func setAlbumCellAnimation ( _ animationBlock: @escaping ((_ layer: CALayer) -> Void) )
     
     
     

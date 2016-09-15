@@ -31,12 +31,12 @@ import UIKit
 import Photos
 
 /**
- Extension on UIViewController to simply presentation of RImgPicker
+ Extension on UIViewController to simply presentation of RHImgPicker
  */
 public extension UIViewController {
     
     /**
-     Present a given image picker with closures, any of the closures can be nil.
+     Present a given image picker.
      - parameter imagePicker: a RHImgPickerViewController to present
      - parameter delegate: a RHImgPickerDelegate protocol or nil
      - parameter animated: To animate the presentation or not
@@ -44,7 +44,7 @@ public extension UIViewController {
      */
     
     
-    func rh_presentRHImgPickerController(imagePicker: RHImgPickerViewController, delegate: RHImgPickerDelegate , animated: Bool, completion: (() -> Void)?) {
+    func rh_presentRHImgPickerController(_ imagePicker: RHImgPickerViewController, delegate: RHImgPickerDelegate , animated: Bool, completion: (() -> Void)?) {
         
         RHImgPickerViewController.authorize(fromViewController: self) { (authorized) -> Void in
             // Make sure we are authorized before proceding
@@ -52,8 +52,8 @@ public extension UIViewController {
             
             //set delegate
             imagePicker.delegateRImgPicker = delegate
-            // Present
-            self.presentViewController(imagePicker, animated: animated, completion: completion)
+            // Present ViewController
+            self.present(imagePicker, animated: animated, completion: completion)
         }
     }
     

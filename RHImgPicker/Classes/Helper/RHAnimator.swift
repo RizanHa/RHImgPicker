@@ -20,7 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-//  ZoomAnimator.swift
+//  RHAnimator.swift
 //  Pods
 //
 //  Created by rizan on 26/08/2016.
@@ -34,32 +34,35 @@ final class RHAnimator : NSObject, UIViewControllerAnimatedTransitioning {
     var sourceImageView: UIImageView?
     var destinationImageView: UIImageView?
     
-    func transitionDuration(transitionContext: UIViewControllerContextTransitioning?) -> NSTimeInterval {
+    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.3
     }
     
-    func animateTransition(transitionContext: UIViewControllerContextTransitioning) {
+    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         // Get to and from view controller
-        if let toViewController = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey), let fromViewController = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey), let sourceImageView = sourceImageView, let destinationImageView = destinationImageView, let containerView = transitionContext.containerView() {
+        if let toViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to), let fromViewController = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.from), let sourceImageView = sourceImageView, let destinationImageView = destinationImageView {
+            
+            let containerView = transitionContext.containerView
+            
             // Disable selection so we don't select anything while the push animation is running
-            fromViewController.view?.userInteractionEnabled = false
+            fromViewController.view?.isUserInteractionEnabled = false
             
             // Setup views
-            sourceImageView.hidden = true
-            destinationImageView.hidden = true
+            sourceImageView.isHidden = true
+            destinationImageView.isHidden = true
             toViewController.view.alpha = 0.0
             fromViewController.view.alpha = 1.0
             containerView.backgroundColor = toViewController.view.backgroundColor
             
             // Setup scaling image
-            let scalingFrame = containerView.convertRect(sourceImageView.frame, fromView: sourceImageView.superview)
+            let scalingFrame = containerView.convert(sourceImageView.frame, from: sourceImageView.superview)
             let scalingImage = ImgViewScaleAspect(frame: scalingFrame)
             scalingImage.img.contentMode = sourceImageView.contentMode
             scalingImage.img.image = sourceImageView.image
             
             //Init image scale
-            let destinationFrame = toViewController.view.convertRect(destinationImageView.bounds, fromView: destinationImageView.superview)
-            if destinationImageView.contentMode == .ScaleAspectFit {
+            let destinationFrame = toViewController.view.convert(destinationImageView.bounds, from: destinationImageView.superview)
+            if destinationImageView.contentMode == .scaleAspectFit {
                 scalingImage.initToScaleAspectFitToFrame(destinationFrame)
             } else {
                 scalingImage.initToScaleAspectFillToFrame(destinationFrame)
@@ -70,15 +73,15 @@ final class RHAnimator : NSObject, UIViewControllerAnimatedTransitioning {
             containerView.addSubview(scalingImage)
             
             // Animate
-            UIView.animateWithDuration(transitionDuration(transitionContext),
+            UIView.animate(withDuration: transitionDuration(using: transitionContext),
                                        delay: 0.0,
-                                       options: UIViewAnimationOptions.TransitionNone,
+                                       options: UIViewAnimationOptions(),
                                        animations: { () -> Void in
                                         // Fade in
                                         fromViewController.view.alpha = 0.0
                                         toViewController.view.alpha = 1.0
                                         
-                                        if destinationImageView.contentMode == .ScaleAspectFit {
+                                        if destinationImageView.contentMode == .scaleAspectFit {
                                             scalingImage.animaticToScaleAspectFit()
                                         } else {
                                             scalingImage.animaticToScaleAspectFill()
@@ -86,7 +89,7 @@ final class RHAnimator : NSObject, UIViewControllerAnimatedTransitioning {
                 }, completion: { (finished) -> Void in
                     
                     // Finish image scaling and remove image view
-                    if destinationImageView.contentMode == .ScaleAspectFit {
+                    if destinationImageView.contentMode == .scaleAspectFit {
                         scalingImage.animateFinishToScaleAspectFit()
                     } else {
                         scalingImage.animateFinishToScaleAspectFill()
@@ -94,15 +97,15 @@ final class RHAnimator : NSObject, UIViewControllerAnimatedTransitioning {
                     scalingImage.removeFromSuperview()
                     
                     // Unhide
-                    destinationImageView.hidden = false
-                    sourceImageView.hidden = false
+                    destinationImageView.isHidden = false
+                    sourceImageView.isHidden = false
                     fromViewController.view.alpha = 1.0
                     
                     // Finish transition
-                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
+                    transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
                     
                     // Enable selection again
-                    fromViewController.view?.userInteractionEnabled = true
+                    fromViewController.view?.isUserInteractionEnabled = true
             })
         }
     }

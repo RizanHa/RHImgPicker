@@ -32,28 +32,27 @@ import Photos
 
 
 
-
-
-
-private let albumDataNotFound : Int = -1    ///
-
-private let previewImg1 : Int = 0
-private let previewImg2 : Int = 1
-private let previewImg3 : Int = 2
+fileprivate enum AlbumPreviewImageIndex : Int {
+    case imgNotFound = -1
+    case img1 = 0
+    case img2 = 1
+    case img3 = 2
+    
+}
 
 
 final class AlbumTableViewDataSource : NSObject, UITableViewDataSource {
     
     
     
-    class func registerCellIdentifiersForTableView(tableView: UITableView?) {
-        tableView?.registerClass(AlbumCell.self, forCellReuseIdentifier: AlbumCell.IDENTIFIER)
+    class func registerCellIdentifiersForTableView(_ tableView: UITableView?) {
+        tableView?.register(AlbumCell.self, forCellReuseIdentifier: AlbumCell.IDENTIFIER)
     }
     
     
+
     
-    
-    private struct AlbumData {
+    fileprivate struct AlbumData {
         
         var albumTitle : String?
         var img1 : UIImage?
@@ -63,39 +62,39 @@ final class AlbumTableViewDataSource : NSObject, UITableViewDataSource {
     
     
     
-    let fetchResults: [PHFetchResult]
+    let fetchResults: [PHFetchResult<AnyObject>]
     
     let settings: RHImgPickerSettings?
     
-    private var DATACach : [AlbumData] = []
+    fileprivate var DATACach : [AlbumData] = []
     
     
     
-    func dataCachIndexForAlbum(albumTitle : String?) -> Int  {
+    fileprivate func dataCachIndexForAlbum(_ albumTitle : String?) -> AlbumPreviewImageIndex  {
     
-        var ObjIndex : Int = albumDataNotFound
-        var ObjFound : Bool = false
+        var ObjIndex : AlbumPreviewImageIndex = .imgNotFound
         
-        
-        for data in DATACach {
+        for (idx,data) in DATACach.enumerated() {
             
-            ObjIndex = ObjIndex + 1
             if data.albumTitle == albumTitle {
-                ObjFound = true
+                
+                let index = min(idx, AlbumPreviewImageIndex.img3.rawValue)
+                
+                if let oj = AlbumPreviewImageIndex(rawValue: idx) {
+                    ObjIndex = oj
+                }
+                
                 break
             }
         
-        }
-        
-        if !ObjFound {
-            ObjIndex = albumDataNotFound
         }
         
         return ObjIndex
     }
     
     
-    func updataDATACach(albumTitle : String?, img : UIImage?, imgIndex : Int) {
+    
+    fileprivate func updataDATACach(_ albumTitle : String?, img : UIImage?, imgIndex : AlbumPreviewImageIndex) {
 
         
         if albumTitle == nil {
@@ -105,24 +104,22 @@ final class AlbumTableViewDataSource : NSObject, UITableViewDataSource {
         
         let objIndex = dataCachIndexForAlbum(albumTitle)
         
-        if (objIndex != albumDataNotFound  )  {
+        if (objIndex != .imgNotFound  )  {
         
-            
-            var data = DATACach[objIndex]
-            
-            DATACach.removeAtIndex(objIndex)
+            var data = DATACach[objIndex.rawValue]
+            DATACach.remove(at: objIndex.rawValue)
             
             
             switch imgIndex {
-            case previewImg1:
+            case .img1:
                 data.img1 = img
                 break
                 
-            case previewImg2:
+            case .img2:
                 data.img2 = img
                 break
             
-            case previewImg3:
+            case .img3:
                 data.img3 = img
                 break
                 
@@ -132,62 +129,52 @@ final class AlbumTableViewDataSource : NSObject, UITableViewDataSource {
             }
             
             DATACach.append(data)
-            
-            
-        
-        
         }
-        
-        
-        
-        
-        
-
     }
     
     
     
-    init(fetchResults: [PHFetchResult], settings: RHImgPickerSettings?) {
+    init(fetchResults: [PHFetchResult<AnyObject>], settings: RHImgPickerSettings?) {
         self.fetchResults = fetchResults
         self.settings = settings
         super.init()
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return fetchResults.count
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return fetchResults[section].count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         UIView.setAnimationsEnabled(false)
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(AlbumCell.IDENTIFIER, forIndexPath: indexPath) as! AlbumCell
-        cell.setup()
+        let cell = tableView.dequeueReusableCell(withIdentifier: AlbumCell.IDENTIFIER, for: indexPath) as! AlbumCell
+        cell.layoutCell()
         
         
         
         
         
-        let cachingManager = PHCachingImageManager.defaultManager() as? PHCachingImageManager
+        let cachingManager = PHCachingImageManager.default() as? PHCachingImageManager
         cachingManager?.allowsCachingHighQualityImages = false
         
         
         
         // Fetch album
-        if let album = fetchResults[indexPath.section][indexPath.row] as? PHAssetCollection {
+        if let album = fetchResults[(indexPath as NSIndexPath).section][(indexPath as NSIndexPath).row] as? PHAssetCollection {
             // Title
             cell.albumTitleLabel.text = album.localizedTitle
   
             
             // check for album preview cash DATA
             let objIndex = dataCachIndexForAlbum(album.localizedTitle)
-            if (objIndex != albumDataNotFound )  {
+            if (objIndex != .imgNotFound )  {
                 
-                let data = DATACach[objIndex]
+                let data = DATACach[objIndex.rawValue]
                 
                 cell.albumTitleLabel.text = data.albumTitle
                 cell.firstImageView.image = data.img1
@@ -206,36 +193,37 @@ final class AlbumTableViewDataSource : NSObject, UITableViewDataSource {
             fetchOptions.sortDescriptors = [
                 NSSortDescriptor(key: "creationDate", ascending: false)
             ]
-            fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.Image.rawValue)
+            fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
             
-            let result = PHAsset.fetchAssetsInAssetCollection(album, options: fetchOptions)
-            result.enumerateObjectsUsingBlock { (object, idx, stop) in
+            let result = PHAsset.fetchAssets(in: album, options: fetchOptions)
+            result.enumerateObjects( { (object, idx, stop) in
                 if let asset = object as? PHAsset {
                     let imageSize = CGSize(width: 80, height: 80)
-                    let imageContentMode: PHImageContentMode = .AspectFill
+                    let imageContentMode: PHImageContentMode = .aspectFill
+                    
                     switch idx {
-                    case previewImg1:
-                        PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: imageSize, contentMode: imageContentMode, options: nil) { (result, _) in
+                    case AlbumPreviewImageIndex.img1.rawValue:
+                        PHCachingImageManager.default().requestImage(for: asset, targetSize: imageSize, contentMode: imageContentMode, options: nil) { (result, _) in
                             cell.firstImageView.image = result
-                            self.updataDATACach(album.localizedTitle, img: cell.firstImageView.image, imgIndex: previewImg1)
+                            self.updataDATACach(album.localizedTitle, img: cell.firstImageView.image, imgIndex: .img1)
                         }
-                    case previewImg2:
-                        PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: imageSize, contentMode: imageContentMode, options: nil) { (result, _) in
+                    case AlbumPreviewImageIndex.img2.rawValue:
+                        PHCachingImageManager.default().requestImage(for: asset, targetSize: imageSize, contentMode: imageContentMode, options: nil) { (result, _) in
                             cell.secondImageView.image = result
-                            self.updataDATACach(album.localizedTitle, img: cell.secondImageView.image, imgIndex: previewImg2)
+                            self.updataDATACach(album.localizedTitle, img: cell.secondImageView.image, imgIndex: .img2)
                         }
-                    case previewImg3:
-                        PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize: imageSize, contentMode: imageContentMode, options: nil) { (result, _) in
+                    case AlbumPreviewImageIndex.img3.rawValue:
+                        PHCachingImageManager.default().requestImage(for: asset, targetSize: imageSize, contentMode: imageContentMode, options: nil) { (result, _) in
                             cell.thirdImageView.image = result
-                            self.updataDATACach(album.localizedTitle, img: cell.thirdImageView.image, imgIndex: previewImg3)
+                            self.updataDATACach(album.localizedTitle, img: cell.thirdImageView.image, imgIndex: .img3)
                         }
                         
                     default:
                         // Stop enumeration
-                        stop.initialize(true)
+                        stop.initialize(to: true)
                     }
                 }
-            }
+            })
         }
         
         

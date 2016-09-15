@@ -39,31 +39,27 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
 
   
     
-    var doneBarButton: UIButton?
-    var clearBarButton: UIButton?
-    var albumButton : UIButton?
-    
     
     var settings: RHImgPickerSettings = RHSettings.sharedInstance
     
-    private var delegateRHImgPicker : RHImgPickerDelegate?
+    fileprivate var delegateRHImgPicker : RHImgPickerDelegate?
     
     
     let expandAnimator = RHAnimator()
     let shrinkAnimator = RHAnimator()
     
-    private var defaultSelections: PHFetchResult?
-    private var fetchResults : [PHFetchResult]
+    fileprivate var defaultSelections: PHFetchResult<AnyObject>?
+    fileprivate var fetchResults : [PHFetchResult<AnyObject>]
     
     
-    private let albumTableView : AlbumTableView = AlbumTableView()
+    fileprivate let albumTableView : AlbumTableView = AlbumTableView()
     
-    private let photosCollectionViewOverLayer : UIView = UIView()
-    private let photosCollectionView : PhotosCollectionView = PhotosCollectionView()
+    fileprivate let photosCollectionViewOverLayer : UIView = UIView()
+    fileprivate let photosCollectionView : PhotosCollectionView = PhotosCollectionView()
     
-    private let proxyViewForStatusBar : UIView = UIView()
+    fileprivate let proxyViewForStatusBar : UIView = UIView()
     
-    private lazy var previewViewContoller: PreviewViewController? = {
+    fileprivate lazy var previewViewContoller: PreviewViewController? = {
         return PreviewViewController(nibName: nil, bundle: nil)
     }()
     
@@ -74,7 +70,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
     
     
     let TAG = "PhotosViewController"
-    func log(message : String) {
+    func log(_ message : String) {
         print(TAG + " : " + message)
     }
     
@@ -91,16 +87,16 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         // Dispose of any resources that can be recreated.
     }
     
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return UIStatusBarStyle.LightContent
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
     }
     
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.Portrait
+    override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.portrait
     }
     
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
@@ -111,8 +107,8 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
     //MARK: - init Methods
     
     
-    required init(fetchResults: [PHFetchResult],
-             defaultSelections: PHFetchResult? = nil,
+    required init(fetchResults: [PHFetchResult<AnyObject>],
+             defaultSelections: PHFetchResult<AnyObject>? = nil,
             settings aSettings: RHImgPickerSettings,
                      delegate : RHImgPickerDelegate?) {
         
@@ -144,11 +140,11 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
     /*
      * setup MainViewController
      */
-    private func setup(frame : CGRect) {
+    fileprivate func setup(_ frame : CGRect) {
         
         
         // hid navigation bar
-        self.navigationController?.navigationBarHidden = true
+        self.navigationController?.isNavigationBarHidden = true
         self.view.backgroundColor = self.settings.backgroundColor
         
         
@@ -162,7 +158,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         
         
         photosCollectionView.photosCollectionViewDelegate = self
-        photosCollectionView.setup(CGRectMake(0, statusBarHeight, frame.size.width, frame.size.height - statusBarHeight - SIZEOFBUTTONS_HEIGHT))      ///(photosView.bounds)
+        photosCollectionView.setup(CGRect(x: 0, y: statusBarHeight, width: frame.size.width, height: frame.size.height - statusBarHeight - SIZEOFBUTTONS_HEIGHT))      ///(photosView.bounds)
         photosCollectionView.clipsToBounds = false
         photosCollectionView.scrollsToTop = true
         photosCollectionView.backgroundColor =  self.settings.backgroundColor
@@ -171,8 +167,8 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         
         photosCollectionViewOverLayer.frame = photosCollectionView.bounds
         photosCollectionViewOverLayer.clipsToBounds = false
-        photosCollectionViewOverLayer.backgroundColor = UIColor.clearColor()
-        photosCollectionViewOverLayer.userInteractionEnabled = false
+        photosCollectionViewOverLayer.backgroundColor = UIColor.clear
+        photosCollectionViewOverLayer.isUserInteractionEnabled = false
         self.view.addSubview(photosCollectionViewOverLayer)
         
         
@@ -181,10 +177,10 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         
  
         
-        let albumFrame = CGRectMake(0, frame.size.height, frame.size.width, SIZEOFALBUMVIEW_HEIGHT - SIZEOFBUTTONS_HEIGHT)
+        let albumFrame = CGRect(x: 0, y: frame.size.height, width: frame.size.width, height: SIZEOFALBUMVIEW_HEIGHT - SIZEOFBUTTONS_HEIGHT)
         
         albumTableView.albumTableViewDelegate = self
-        albumTableView.backgroundColor = UIColor.clearColor()
+        albumTableView.backgroundColor = UIColor.clear
         albumTableView.setup(albumFrame, albumsDataSource: AlbumTableViewDataSource(fetchResults: self.fetchResults, settings: self.settings))
         albumTableView.scrollsToTop = false
         self.view.addSubview(albumTableView)
@@ -197,7 +193,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         
         
         // proxy view for status bar
-        proxyViewForStatusBar.frame = CGRectMake(0, 0,self.view.frame.size.width, UIApplication.sharedApplication().statusBarFrame.size.height)
+        proxyViewForStatusBar.frame = CGRect(x: 0, y: 0,width: self.view.frame.size.width, height: UIApplication.shared.statusBarFrame.size.height)
         proxyViewForStatusBar.backgroundColor = self.settings.backgroundColor
         self.view.addSubview(proxyViewForStatusBar)
         
@@ -207,20 +203,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         navigationController?.delegate = self
       
         
-        
-        
-
-        
-        if self.settings.useToolBarButtons {
-            setupToolBarButtons()
-        }
-        else {
-            // Set Buttons
-            setupButtons()
-        }
-
-        
-        
+        self.setupToolBarButtons()
         
         
         // init photos collection for first album
@@ -242,83 +225,17 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
     
     
     /*
-     * setup Buttons as UIButtons
+     * setup Buttons - UIToolBarButtons
      */
-    private func setupButtons() {
+    fileprivate func setupToolBarButtons() {
     
-        
-        
-        let viewHeight = UIScreen.mainScreen().bounds.size.height ///self.view.frame.size.height + statusBarHeight
+    
+        let viewHeight = self.view.frame.size.height ///self.view.frame.size.height + statusBarHeight
         let buttonSize = self.view.frame.size.width / 3
         
         
-        
-        self.buttonsView.frame = CGRectMake(0, viewHeight - SIZEOFBUTTONS_HEIGHT , buttonSize*3 , SIZEOFBUTTONS_HEIGHT)
-        self.buttonsView.backgroundColor = UIColor.clearColor()
-        self.view.addSubview(self.buttonsView)
-        
-
-        let buttons = [self.clearBarButton, self.albumButton , self.doneBarButton]
-        
-        
-        var index = 0
-        for button in buttons {
-        
-            if let button = button {
-                
-                
-                switch index {
-                case 0:
-                    button.addTarget(self, action: #selector(MainViewController.clearButtonPressed(_:)), forControlEvents: .TouchUpInside)
-                    break
-                case 1:
-                    button.addTarget(self, action: #selector(MainViewController.albumButtonPressed(_:)), forControlEvents: .TouchUpInside)
-                    break
-                case 2:
-                    button.addTarget(self, action: #selector(MainViewController.doneButtonPressed(_:)), forControlEvents: .TouchUpInside)
-                    
-                    break
-                default:
-                    break
-                }
-
-                button.frame = CGRectMake(buttonSize*CGFloat(index), 0 , buttonSize , SIZEOFBUTTONS_HEIGHT)
-                self.buttonsView.addSubview(button)
-                
-                for subview in button.subviews {
-                    subview.frame = button.bounds
-                }
-                
-                index = index + 1
-            }
-            
-        }
-        
-        
-        
-        selectionCounterView.frame = CGRectMake(buttonSize - SIZEOFBUTTONS_HEIGHT*0.6 , -SIZEOFBUTTONS_HEIGHT*0.6*0.25 , SIZEOFBUTTONS_HEIGHT*1, SIZEOFBUTTONS_HEIGHT*0.6)
-        selectionCounterView.selectionCounterString = "0"
-        selectionCounterView.backgroundColor = UIColor.clearColor()
-        selectionCounterView.hidden = true
-        self.buttonsView.addSubview(selectionCounterView)
-        
-        
-    }
-    
-    /*
-     * setup Buttons as UIToolBarButtons
-     */
-    private func setupToolBarButtons() {
-    
-    
-        let viewHeight = UIScreen.mainScreen().bounds.size.height ///self.view.frame.size.height + statusBarHeight
-        let buttonSize = self.view.frame.size.width / 3
-        
-        
-        
-        
-        self.buttonsView.frame = CGRectMake(0, viewHeight - SIZEOFBUTTONS_HEIGHT , buttonSize*3 , SIZEOFBUTTONS_HEIGHT)
-        self.buttonsView.backgroundColor = UIColor.clearColor()
+        self.buttonsView.frame = CGRect(x: 0, y: viewHeight - SIZEOFBUTTONS_HEIGHT , width: buttonSize*3 , height: SIZEOFBUTTONS_HEIGHT)
+        self.buttonsView.backgroundColor = UIColor.clear
         self.buttonsView.clipsToBounds = false
         self.view.addSubview(self.buttonsView)
         
@@ -329,35 +246,35 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         toolbar.backgroundColor = self.settings.toolBarButtonsBackgroundColor
         toolbar.barTintColor = self.settings.toolBarButtonsBackgroundColor
         
-        let item0 = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.FixedSpace , target: nil, action: nil)
+        let item0 = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace , target: nil, action: nil)
         item0.width = 10.0
         
         
-        let item1 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[0] , style: .Plain, target: self, action: #selector(clearButtonPressed(_:)))
+        let item1 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[0] , style: .plain, target: self, action: #selector(clearButtonPressed(_:)))
             
         item1.tintColor = self.settings.toolBarButtonsFontColor
         
-        let item2 = UIBarButtonItem.init(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+        let item2 = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        let item3 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[1] , style: .Plain, target: self, action: #selector(albumButtonPressed(_:)))
+        let item3 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[1] , style: .plain, target: self, action: #selector(albumButtonPressed(_:)))
         item3.tintColor = self.settings.toolBarButtonsFontColor
         
-        let item4 = UIBarButtonItem.init(barButtonSystemItem: .FlexibleSpace, target: nil, action: nil)
+        let item4 = UIBarButtonItem.init(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         
-        let item5 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[2] , style: .Done, target: self, action: #selector(doneButtonPressed(_:)))
+        let item5 = UIBarButtonItem.init(title: self.settings.buttonLabelTexts[2] , style: .done, target: self, action: #selector(doneButtonPressed(_:)))
         item5.tintColor = self.settings.toolBarButtonsFontColor
         
-        let item6 = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.FixedSpace , target: nil, action: nil)
+        let item6 = UIBarButtonItem.init(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace , target: nil, action: nil)
         item6.width = 10.0
        
         
         toolbar.items = [item0,item1,item2,item3,item4,item5,item6]
         
         
-        selectionCounterView.frame = CGRectMake(buttonSize - SIZEOFBUTTONS_HEIGHT*0.6 , -SIZEOFBUTTONS_HEIGHT*0.6*0.25 , SIZEOFBUTTONS_HEIGHT*1, SIZEOFBUTTONS_HEIGHT*0.6)
+        selectionCounterView.frame = CGRect(x: buttonSize - SIZEOFBUTTONS_HEIGHT*0.6 , y: -SIZEOFBUTTONS_HEIGHT*0.6*0.25 , width: SIZEOFBUTTONS_HEIGHT*1, height: SIZEOFBUTTONS_HEIGHT*0.6)
         selectionCounterView.selectionCounterString = "0"
-        selectionCounterView.backgroundColor = UIColor.clearColor()
-        selectionCounterView.hidden = true
+        selectionCounterView.backgroundColor = UIColor.clear
+        selectionCounterView.isHidden = true
         self.buttonsView.addSubview(selectionCounterView)
     
     
@@ -367,7 +284,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
     
     // MARK: Button Pressed Methods
     
-    func clearButtonPressed(sender: AnyClass) {
+    func clearButtonPressed(_ sender: AnyClass) {
         
         self.clearSelections()
       
@@ -379,16 +296,16 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         
     }
     
-    func albumButtonPressed(sender: AnyClass) {
+    func albumButtonPressed(_ sender: AnyClass) {
         
         self.showAlbumSelection(!albumIsShowing)
     }
     
     
-    func doneButtonPressed(sender: AnyClass) {
+    func doneButtonPressed(_ sender: AnyClass) {
         
         guard let delegate = self.delegateRHImgPicker  else {
-            self.dismissViewControllerAnimated(true, completion: nil)
+            self.dismiss(animated: true, completion: nil)
             return
         }
         
@@ -399,7 +316,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
             delegate.RHImgPickerDidFinishPickingAssets([])
         }
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
         
         
     }
@@ -413,7 +330,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         guard let selections = self.photosCollectionView.photosDataSource?.selections else {
             
             selectionCounterView.selectionCounterString = "0"
-            selectionCounterView.hidden = true
+            selectionCounterView.isHidden = true
             
             return
         }
@@ -421,12 +338,12 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         if selections.count > 0 {
             
             selectionCounterView.selectionCounterString = String(selections.count)
-            selectionCounterView.hidden = false
+            selectionCounterView.isHidden = false
         }
         else {
         
             selectionCounterView.selectionCounterString = "0"
-            selectionCounterView.hidden = true
+            selectionCounterView.isHidden = true
         }
         
         
@@ -436,26 +353,26 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
     
     var albumIsShowing : Bool = false
 
-    private func showAlbumSelection(show : Bool) {
+    fileprivate func showAlbumSelection(_ show : Bool) {
     
         if  !show {
             
             albumIsShowing = false
-            self.view.userInteractionEnabled = false
+            self.view.isUserInteractionEnabled = false
             
 
             
-            UIView.animateWithDuration(0.25, animations: {
+            UIView.animate(withDuration: 0.25, animations: {
                 
-                self.photosCollectionView.frame = CGRectOffset(self.photosCollectionView.frame, 0, SIZEOFALBUMVIEW_HEIGHT*0.2)
-                self.albumTableView.frame = CGRectOffset((self.albumTableView.frame), 0, SIZEOFALBUMVIEW_HEIGHT)
+                self.photosCollectionView.frame = self.photosCollectionView.frame.offsetBy(dx: 0, dy: SIZEOFALBUMVIEW_HEIGHT*0.2)
+                self.albumTableView.frame = (self.albumTableView.frame).offsetBy(dx: 0, dy: SIZEOFALBUMVIEW_HEIGHT)
                 
                 }, completion: { (finish) in
                     
-                    self.albumTableView.setContentOffset(CGPointZero, animated: false)
-                    self.photosCollectionViewOverLayer.userInteractionEnabled = false
-                    self.photosCollectionView.userInteractionEnabled = true
-                    self.view.userInteractionEnabled = true
+                    self.albumTableView.setContentOffset(CGPoint.zero, animated: false)
+                    self.photosCollectionViewOverLayer.isUserInteractionEnabled = false
+                    self.photosCollectionView.isUserInteractionEnabled = true
+                    self.view.isUserInteractionEnabled = true
                     
                     if let gestureRecognizers = self.photosCollectionViewOverLayer.gestureRecognizers {
                         for gr in gestureRecognizers {
@@ -471,28 +388,28 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
             
             albumIsShowing = true
             
-            self.view.userInteractionEnabled = false
-            self.photosCollectionView.userInteractionEnabled = false
-            self.photosCollectionViewOverLayer.userInteractionEnabled = true
+            self.view.isUserInteractionEnabled = false
+            self.photosCollectionView.isUserInteractionEnabled = false
+            self.photosCollectionViewOverLayer.isUserInteractionEnabled = true
             self.albumTableView.reloadData()
             
             
             
-            UIView.animateWithDuration(0.25, animations: {
+            UIView.animate(withDuration: 0.25, animations: {
                 
-                self.photosCollectionView.frame = CGRectOffset(self.photosCollectionView.frame, 0, -SIZEOFALBUMVIEW_HEIGHT*0.2)
-                self.albumTableView.frame = CGRectOffset((self.albumTableView.frame), 0, -SIZEOFALBUMVIEW_HEIGHT)
+                self.photosCollectionView.frame = self.photosCollectionView.frame.offsetBy(dx: 0, dy: -SIZEOFALBUMVIEW_HEIGHT*0.2)
+                self.albumTableView.frame = (self.albumTableView.frame).offsetBy(dx: 0, dy: -SIZEOFALBUMVIEW_HEIGHT)
                 
                 
                 }, completion: { (finish) in
                     
                     
                     
-                    if  let indexPath : NSIndexPath = self.albumTableView.indexPathForSelectedRow {
-                        self.albumTableView.deselectRowAtIndexPath(indexPath, animated: true)
+                    if  let indexPath : IndexPath = self.albumTableView.indexPathForSelectedRow {
+                        self.albumTableView.deselectRow(at: indexPath, animated: true)
                     }
                     
-                    self.view.userInteractionEnabled = true
+                    self.view.isUserInteractionEnabled = true
                     
                     
                     
@@ -513,7 +430,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
                     
                     
                     let swipRecognizer = UISwipeGestureRecognizer()
-                    swipRecognizer.direction = .Down
+                    swipRecognizer.direction = .down
                     swipRecognizer.addTarget(self, action: #selector(MainViewController.tapOnPhotoView))
                     self.photosCollectionViewOverLayer.addGestureRecognizer(swipRecognizer)
                     
@@ -550,12 +467,11 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         // Deselect asset
         if photosDataSource.selections.count > 0 {
             
-            self.photosCollectionView.deselectVisableCellsFromCollectionViewAnimated(true)
-            self.photosCollectionView.deselectAllCellsAnimated(false)
+            self.photosCollectionView.clearSelectdCells()
             photosDataSource.selections.removeAll()
         }
         
-        updateSelectionCounter()
+        self.updateSelectionCounter()
         
 
     
@@ -568,7 +484,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
     
     //MARK: - AlbumTableViewDelegate
     
-    func albumTableViewDidSelect(album: PHAssetCollection) {
+    func albumTableViewDidSelect(_ album: PHAssetCollection) {
         // load data for selected album
         
         
@@ -587,16 +503,16 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
     
     //MARK: - PhotosCollectionViewDelegate
     
-    func photosCollectionViewDelegateDidSelect(asset: PHAsset) {
+    func photosCollectionViewDelegateDidSelect(_ asset: PHAsset) {
         
         
-        updateSelectionCounter()
+        self.updateSelectionCounter()
     }
     
-    func photosCollectionViewDelegateDidDeselect(asset: PHAsset) {
+    func photosCollectionViewDelegateDidDeselect(_ asset: PHAsset) {
         
         
-        updateSelectionCounter()
+        self.updateSelectionCounter()
     }
     
     
@@ -605,20 +521,20 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
     
     //MARK: - Album Photo Data Sync functions
     
-    func initializePhotosDataSource(album: PHAssetCollection, selections: PHFetchResult? = nil) {
+    func initializePhotosDataSource(_ album: PHAssetCollection, selections: PHFetchResult<AnyObject>? = nil) {
         // Set up a photo data source with album
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [
             NSSortDescriptor(key: "creationDate", ascending: false)
         ]
-        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.Image.rawValue)
+        fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.image.rawValue)
         
         
-        initializePhotosDataSourceWithFetchResult(PHAsset.fetchAssetsInAssetCollection(album, options: fetchOptions), selections: selections)
+        initializePhotosDataSourceWithFetchResult(PHAsset.fetchAssets(in: album, options: fetchOptions) as! PHFetchResult<AnyObject>, selections: selections)
     }
     
  
-    func initializePhotosDataSourceWithFetchResult(fetchResult: PHFetchResult, selections: PHFetchResult? = nil) {
+    func initializePhotosDataSourceWithFetchResult(_ fetchResult: PHFetchResult<AnyObject>, selections: PHFetchResult<AnyObject>? = nil) {
         let newDataSource = PhotoCollectionViewDataSource(fetchResult: fetchResult, selections: selections, settings: settings)
         
         // Transfer image size
@@ -629,7 +545,7 @@ class MainViewController: UIViewController, AlbumTableViewDelegate, PhotosCollec
         }
         
         /// to fix a crash -> set the photos collection view scroll position to top
-        self.photosCollectionView.setContentOffset(CGPointZero, animated: false)
+        self.photosCollectionView.setContentOffset(CGPoint.zero, animated: false)
         
         
         self.photosCollectionView.photosDataSource = newDataSource
@@ -650,8 +566,8 @@ extension MainViewController: UINavigationControllerDelegate {
     
 
     
-    func navigationController(navigationController: UINavigationController, animationControllerForOperation operation: UINavigationControllerOperation, fromViewController fromVC: UIViewController, toViewController toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        if operation == .Push {
+    func navigationController(_ navigationController: UINavigationController, animationControllerFor operation: UINavigationControllerOperation, from fromVC: UIViewController, to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        if operation == .push {
             return expandAnimator
         } else {
             return shrinkAnimator
@@ -669,9 +585,9 @@ extension MainViewController: UINavigationControllerDelegate {
 extension MainViewController {
 
     func captureScreen() -> UIImage? {
-        if let window = UIApplication.sharedApplication().windows.first {
-            UIGraphicsBeginImageContextWithOptions(window.frame.size, window.opaque, 0.0)
-            window.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        if let window = UIApplication.shared.windows.first {
+            UIGraphicsBeginImageContextWithOptions(window.frame.size, window.isOpaque, 0.0)
+            window.layer.render(in: UIGraphicsGetCurrentContext()!)
             let image = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             return image;
@@ -696,27 +612,27 @@ extension MainViewController {
 
 
 
-    func collectionViewLongPressed(sender: UIGestureRecognizer) {
+    func collectionViewLongPressed(_ sender: UIGestureRecognizer) {
         
         let collectionView = self.photosCollectionView
         
-        if sender.state == .Began {
+        if sender.state == .began {
             // Disable recognizer while we are figuring out location and pushing preview
-            sender.enabled = false
-            collectionView.userInteractionEnabled = false
+            sender.isEnabled = false
+            collectionView.isUserInteractionEnabled = false
             
             // Calculate which index path long press came from
-            let location = sender.locationInView(collectionView)
-            let indexPath = collectionView.indexPathForItemAtPoint(location)
+            let location = sender.location(in: collectionView)
+            let indexPath = collectionView.indexPathForItem(at: location)
             
-            if let vc = previewViewContoller , let indexPath = indexPath, let cell = collectionView.cellForItemAtIndexPath(indexPath) as? PhotoCell, let asset = cell.asset {
+            if let vc = previewViewContoller , let indexPath = indexPath, let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell, let asset = cell.asset {
                 // Setup fetch options to be synchronous
                 let options = PHImageRequestOptions()
-                options.synchronous = true
+                options.isSynchronous = true
                 
                 // Load image for preview
                 if let imageView = vc.imageView {
-                    PHCachingImageManager.defaultManager().requestImageForAsset(asset, targetSize:imageView.frame.size, contentMode: .AspectFit, options: options) { (result, _) in
+                    PHCachingImageManager.default().requestImage(for: asset, targetSize:imageView.frame.size, contentMode: .aspectFit, options: options) { (result, _) in
                         imageView.image = result
                     }
                 }
@@ -737,9 +653,9 @@ extension MainViewController {
             }
             
             // Re-enable recognizer, after animation is done
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(expandAnimator.transitionDuration(nil) * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), { () -> Void in
-                sender.enabled = true
-                collectionView.userInteractionEnabled = true
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(expandAnimator.transitionDuration(using: nil) * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: { () -> Void in
+                sender.isEnabled = true
+                collectionView.isUserInteractionEnabled = true
             })
         }
     }

@@ -36,8 +36,8 @@ import UIKit
 class ImgViewScaleAspect : UIView {
     
     
-    private var newFrameWrapper : CGRect = CGRectZero
-    private var newFrameImg : CGRect = CGRectZero
+    fileprivate var newFrameWrapper : CGRect = CGRect.zero
+    fileprivate var newFrameImg : CGRect = CGRect.zero
     var img : UIImageView = UIImageView()
     
     
@@ -52,8 +52,8 @@ class ImgViewScaleAspect : UIView {
      */
     init() {
         
-        super.init(frame: CGRectZero)
-        self.img.contentMode = .Center
+        super.init(frame: CGRect.zero)
+        self.img.contentMode = .center
         self.addSubview(self.img)
         self.clipsToBounds = true
         
@@ -73,8 +73,8 @@ class ImgViewScaleAspect : UIView {
         
         super.init(frame: frame)
         
-        self.img.frame = CGRectMake(0, 0, frame.width, frame.height)
-        self.img.contentMode = .Center
+        self.img.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+        self.img.contentMode = .center
         self.addSubview(self.img)
         self.clipsToBounds = true
         
@@ -85,7 +85,7 @@ class ImgViewScaleAspect : UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.img.contentMode = .Center
+        self.img.contentMode = .center
         self.frame = self.frame
         self.addSubview(self.img)
         self.clipsToBounds = true
@@ -103,12 +103,12 @@ class ImgViewScaleAspect : UIView {
      *  @param duration
      *  @param delay
      */
-    func animateToScaleAspectFitToFrame(frame: CGRect,  duration : Double,  delay : Double ) {
+    func animateToScaleAspectFitToFrame(_ frame: CGRect,  duration : Double,  delay : Double ) {
         
         if (!self.UIImageIsEmpty()) {
             self.initToScaleAspectFitToFrame(frame)
             
-            UIView.animateWithDuration(duration, delay: delay, options: .AllowUserInteraction , animations: {
+            UIView.animate(withDuration: duration, delay: delay, options: .allowUserInteraction , animations: {
                 self.animaticToScaleAspectFit()
                 }, completion: { (finish) in
                     // finish animation
@@ -128,13 +128,13 @@ class ImgViewScaleAspect : UIView {
      *  @param duration
      *  @param delay
      */
-    func animateToScaleAspectFillToFrame (frame : CGRect, duration:Double,  delay : Double ) {
+    func animateToScaleAspectFillToFrame (_ frame : CGRect, duration:Double,  delay : Double ) {
         
         if (!self.UIImageIsEmpty()) {
             
             self.initToScaleAspectFillToFrame(frame)
             
-            UIView.animateWithDuration(duration, delay: delay, options: .AllowUserInteraction , animations: {
+            UIView.animate(withDuration: duration, delay: delay, options: .allowUserInteraction , animations: {
                 self.animaticToScaleAspectFill()
                 }, completion: { (finish) in
                     // finish animation
@@ -155,22 +155,22 @@ class ImgViewScaleAspect : UIView {
      *  @param delay
      *  @param completion
      */
-    func animateToScaleAspectFitToFrame (frame:CGRect,  duration:Double,  delay:Double,  completion:(finish: Bool) -> Void) {
+    func animateToScaleAspectFitToFrame (_ frame:CGRect,  duration:Double,  delay:Double,  completion:@escaping (_ finish: Bool) -> Void) {
         
         if (!self.UIImageIsEmpty()) {
             self.initToScaleAspectFitToFrame(frame)
             
             
-            UIView.animateWithDuration(duration, delay: delay, options: .AllowUserInteraction , animations: {
+            UIView.animate(withDuration: duration, delay: delay, options: .allowUserInteraction , animations: {
                 self.animaticToScaleAspectFit()
                 }, completion: { (finish) in
                     // finish animation
-                    completion(finish: finish)
+                    completion(finish)
             })
             
         }else{
             ///if (completion != nil) {
-            completion(finish:true)
+            completion(true)
             ///}
             print("ERROR, UIImageView %@ don't have UIImage",self)
         }
@@ -186,22 +186,22 @@ class ImgViewScaleAspect : UIView {
      *  @param delay
      *  @param completion
      */
-    func animateToScaleAspectFillToFrame(frame :CGRect,  duration:Double ,delay: Double, completion:(finish:Bool) -> Void) {
+    func animateToScaleAspectFillToFrame(_ frame :CGRect,  duration:Double ,delay: Double, completion:@escaping (_ finish:Bool) -> Void) {
         
         if (!self.UIImageIsEmpty()) {
             self.initToScaleAspectFillToFrame(frame)
             
-            UIView.animateWithDuration(duration, delay: delay, options: .AllowUserInteraction , animations: {
+            UIView.animate(withDuration: duration, delay: delay, options: .allowUserInteraction , animations: {
                 self.animaticToScaleAspectFill()
                 }, completion: { (finish) in
                     // finish animation
                     self.animateFinishToScaleAspectFill()
-                    completion(finish: finish)
+                    completion(finish)
             })
             
         }else{
             ///if (completion) {
-            completion(finish: true);
+            completion(true);
             ///}
             print("ERROR, UIImageView %@ don't have UIImage",self)
         }
@@ -215,26 +215,26 @@ class ImgViewScaleAspect : UIView {
      *
      *  @param newFrame
      */
-    func initToScaleAspectFitToFrame(newFrame : CGRect ) {
+    func initToScaleAspectFitToFrame(_ newFrame : CGRect ) {
         
         if (!self.UIImageIsEmpty()) {
             
             let ratioImg = (img.image!.size.width) / (img.image!.size.height);
             
             if ( self.choiseFunctionWithRationImg(ratioImg ,newFrame:self.frame)) {
-                self.img.frame = CGRectMake( -(self.frame.size.height * ratioImg - self.frame.size.width) / 2.0, 0,
-                                             self.frame.size.height * ratioImg, self.frame.size.height)
+                self.img.frame = CGRect( x: -(self.frame.size.height * ratioImg - self.frame.size.width) / 2.0, y: 0,
+                                             width: self.frame.size.height * ratioImg, height: self.frame.size.height)
             }else{
-                self.img.frame = CGRectMake(0, -(self.frame.size.width / ratioImg - self.frame.size.height) / 2.0,
-                                            self.frame.size.width, self.frame.size.width / ratioImg)
+                self.img.frame = CGRect(x: 0, y: -(self.frame.size.width / ratioImg - self.frame.size.height) / 2.0,
+                                            width: self.frame.size.width, height: self.frame.size.width / ratioImg)
             }
         }else{
             print("ERROR, UIImageView %@ don't have UIImage",self)
         }
         
-        img.contentMode = .ScaleAspectFit
+        img.contentMode = .scaleAspectFit
         
-        self.newFrameImg = CGRectMake(0, 0, newFrame.size.width, newFrame.size.height)
+        self.newFrameImg = CGRect(x: 0, y: 0, width: newFrame.size.width, height: newFrame.size.height)
         self.newFrameWrapper = newFrame
         
     }
@@ -244,19 +244,19 @@ class ImgViewScaleAspect : UIView {
      *
      *  @param newFrame
      */
-    func initToScaleAspectFillToFrame (newFrame : CGRect) {
+    func initToScaleAspectFillToFrame (_ newFrame : CGRect) {
         
         if (!self.UIImageIsEmpty()) {
             
             let ratioImg = ( img.image!.size.width) / ( img.image!.size.height)
             
             if ( self.choiseFunctionWithRationImg(ratioImg, newFrame:newFrame)) {
-                self.newFrameImg = CGRectMake( -(newFrame.size.height * ratioImg - newFrame.size.width) / 2.0, 0,
-                                               newFrame.size.height * ratioImg, newFrame.size.height)
+                self.newFrameImg = CGRect( x: -(newFrame.size.height * ratioImg - newFrame.size.width) / 2.0, y: 0,
+                                               width: newFrame.size.height * ratioImg, height: newFrame.size.height)
                 
             }else{
-                self.newFrameImg = CGRectMake(0, -(newFrame.size.width / ratioImg - newFrame.size.height) / 2.0, newFrame.size.width,
-                                              newFrame.size.width / ratioImg)
+                self.newFrameImg = CGRect(x: 0, y: -(newFrame.size.width / ratioImg - newFrame.size.height) / 2.0, width: newFrame.size.width,
+                                              height: newFrame.size.width / ratioImg)
             }
         }else{
             print("ERROR, UIImageView %@ don't have UIImage",self)
@@ -305,8 +305,8 @@ class ImgViewScaleAspect : UIView {
      *  Last Function Fill
      */
     func animateFinishToScaleAspectFill() {
-        self.img.contentMode = .ScaleAspectFill
-        self.img.frame  = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)
+        self.img.contentMode = .scaleAspectFill
+        self.img.frame  = CGRect(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
         
     }
     
@@ -314,7 +314,7 @@ class ImgViewScaleAspect : UIView {
     
     //MARK: - Private
     
-    private func UIImageIsEmpty() -> Bool {
+    fileprivate func UIImageIsEmpty() -> Bool {
         
       
         guard
@@ -336,7 +336,7 @@ class ImgViewScaleAspect : UIView {
     
     
     
-    private func choiseFunctionWithRationImg(ratioImg : CGFloat , newFrame : CGRect ) -> Bool {
+    fileprivate func choiseFunctionWithRationImg(_ ratioImg : CGFloat , newFrame : CGRect ) -> Bool {
         
         var resultat = false
         

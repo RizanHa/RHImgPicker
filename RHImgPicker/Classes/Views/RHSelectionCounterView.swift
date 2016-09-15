@@ -52,7 +52,7 @@ import Foundation
     }
     
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
         let settings: RHImgPickerSettings = RHSettings.sharedInstance
         
@@ -72,7 +72,7 @@ import Foundation
         
         /// estimate size for rounded rect
         let stringToDraw = selectionCounterString + "/" + String(settings.maxNumberOfSelections)
-        let size = stringToDraw.sizeWithAttributes(settings.selectionTextAttributes)
+        let size = stringToDraw.size(attributes: settings.selectionTextAttributes)
         
         let stringToDrawLength = NSString.init(string: stringToDraw).length
         
@@ -89,24 +89,24 @@ import Foundation
         
         
         //// path for Drawing
-        let checkedROundedRectPath = UIBezierPath(roundedRect: CGRectMake(rect.origin.x + offset, rect.origin.y + offsetH, rect.size.width - 2*offset , rect.size.height - 2*offsetH), cornerRadius: rect.size.height*0.25)
+        let checkedROundedRectPath = UIBezierPath(roundedRect: CGRect(x: rect.origin.x + offset, y: rect.origin.y + offsetH, width: rect.size.width - 2*offset , height: rect.size.height - 2*offsetH), cornerRadius: rect.size.height*0.25)
         
-        CGContextSaveGState(context)
-        CGContextSetShadowWithColor(context, shadow2Offset, shadow2BlurRadius, settings.selectionShadowColor.CGColor)
+        context?.saveGState()
+        context?.setShadow(offset: shadow2Offset, blur: shadow2BlurRadius, color: settings.selectionShadowColor.cgColor)
         settings.selectionFillColor.setFill()
         checkedROundedRectPath.fill()
-        CGContextRestoreGState(context)
+        context?.restoreGState()
         
         settings.selectionStrokeColor.setStroke()
         checkedROundedRectPath.lineWidth = 1
         checkedROundedRectPath.stroke()
         
         
-        CGContextSetFillColorWithColor(context, UIColor.whiteColor().CGColor)
+        context?.setFillColor(UIColor.white.cgColor)
         
         //// Check mark for single assets
         if (settings.maxNumberOfSelections == 1) {
-            CGContextSetStrokeColorWithColor(context, UIColor.whiteColor().CGColor)
+            context?.setStrokeColor(UIColor.white.cgColor)
             
             let pixelSize = rect.size.height / 8
             let offsetX = pixelSize*4.0
@@ -114,9 +114,9 @@ import Foundation
             
             
             let checkPath = UIBezierPath()
-            checkPath.moveToPoint(CGPoint(x: offsetX + 1*pixelSize, y: offsetY + 3*pixelSize))
-            checkPath.addLineToPoint(CGPoint(x: offsetX + 2*pixelSize, y: offsetY + 4*pixelSize))
-            checkPath.addLineToPoint(CGPoint(x: offsetX + 4*pixelSize, y: offsetY + 2*pixelSize))
+            checkPath.move(to: CGPoint(x: offsetX + 1*pixelSize, y: offsetY + 3*pixelSize))
+            checkPath.addLine(to: CGPoint(x: offsetX + 2*pixelSize, y: offsetY + 4*pixelSize))
+            checkPath.addLine(to: CGPoint(x: offsetX + 4*pixelSize, y: offsetY + 2*pixelSize))
             checkPath.lineWidth = pixelSize*1.25
             checkPath.stroke()
             return
@@ -124,9 +124,9 @@ import Foundation
         
         ////  Drawing string
   
-        stringToDraw.drawInRect(CGRectMake(CGRectGetMidX(checkmarkFrame) - size.width / 2.0,
-            CGRectGetMidY(checkmarkFrame) - size.height / 2.0,
-            size.width,
-            size.height), withAttributes: settings.selectionTextAttributes)
+        stringToDraw.draw(in: CGRect(x: checkmarkFrame.midX - size.width / 2.0,
+            y: checkmarkFrame.midY - size.height / 2.0,
+            width: size.width,
+            height: size.height), withAttributes: settings.selectionTextAttributes)
     }
 }

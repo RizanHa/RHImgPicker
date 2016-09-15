@@ -8,18 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		150F9D45E6EEE8E49F100B54105C75D9 /* RHImgPicker-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A3D25933950E3368A5D79A0BA9E5303 /* RHImgPicker-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		591F4D9652E3EF34B32BC9C543794C96 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
 		65E327B89E88D2D502F821D749B9444D /* Pods-RHImgPicker_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = AF0FDB97249D4372C52FB626E2A722E0 /* Pods-RHImgPicker_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6DD686A01FCEBCD9EF7436CFA271672F /* Pods-RHImgPicker_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = BE860DFD0C4D1341096F101A129D788E /* Pods-RHImgPicker_Example-dummy.m */; };
 		7A255EB68F07D4B6BB47049BC907C105 /* RHImgPicker-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FE2987C55A20E106DD396E424EA952A1 /* RHImgPicker-dummy.m */; };
 		84B91402F38CEAC4355A7E2AB9B37159 /* Pods-RHImgPicker_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2095449AFA8BC8B8469E4CB679CF411B /* Pods-RHImgPicker_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		90D290AB3DE334DDACD62EAC9EEF26D4 /* Pods-RHImgPicker_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = AFD4D3E021647DE82EB9F8EA50C7A334 /* Pods-RHImgPicker_Tests-dummy.m */; };
-		A1331FA9954714BDAB36781710D2C4CC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
+		A4B4212E1D8AB67400CFDEB6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B4212D1D8AB67400CFDEB6 /* UIKit.framework */; };
+		A4B421301D8AB67C00CFDEB6 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B4212F1D8AB67C00CFDEB6 /* Photos.framework */; };
+		A4B421321D8ABB5D00CFDEB6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4B421311D8ABB5D00CFDEB6 /* Foundation.framework */; };
 		A4CCBCD31D76F92B00C8DF46 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCB91D76F92B00C8DF46 /* MainViewController.swift */; };
 		A4CCBCD41D76F92B00C8DF46 /* PreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCBA1D76F92B00C8DF46 /* PreviewViewController.swift */; };
 		A4CCBCD51D76F92B00C8DF46 /* RHImgPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCBB1D76F92B00C8DF46 /* RHImgPickerViewController.swift */; };
-		A4CCBCD61D76F92B00C8DF46 /* NSIndexSet+NSIndexPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCBD1D76F92B00C8DF46 /* NSIndexSet+NSIndexPath.swift */; };
-		A4CCBCD71D76F92B00C8DF46 /* UIButton+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCBE1D76F92B00C8DF46 /* UIButton+Animation.swift */; };
+		A4CCBCD61D76F92B00C8DF46 /* NSMutableIndexSet+NSIndexPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCBD1D76F92B00C8DF46 /* NSMutableIndexSet+NSIndexPath.swift */; };
 		A4CCBCD81D76F92B00C8DF46 /* UIImageView+blur.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCBF1D76F92B00C8DF46 /* UIImageView+blur.swift */; };
 		A4CCBCD91D76F92B00C8DF46 /* UIViewController+RHImgPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCC01D76F92B00C8DF46 /* UIViewController+RHImgPicker.swift */; };
 		A4CCBCDA1D76F92B00C8DF46 /* ImgViewScaleAspect.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCC21D76F92B00C8DF46 /* ImgViewScaleAspect.swift */; };
@@ -35,9 +35,6 @@
 		A4CCBCE41D76F92B00C8DF46 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCD01D76F92B00C8DF46 /* PhotoCell.swift */; };
 		A4CCBCE51D76F92B00C8DF46 /* PhotosCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCD11D76F92B00C8DF46 /* PhotosCollectionView.swift */; };
 		A4CCBCE61D76F92B00C8DF46 /* RHSelectionCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CCBCD21D76F92B00C8DF46 /* RHSelectionCounterView.swift */; };
-		A4CCBCE81D76F9CC00C8DF46 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4CCBCE71D76F9CC00C8DF46 /* UIKit.framework */; };
-		A4CCBCEA1D76F9D200C8DF46 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4CCBCE91D76F9D200C8DF46 /* Photos.framework */; };
-		E7FE631A5A9F05B65B340BC6ACBFDB5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,11 +63,13 @@
 		82BF65435B14430340896F73BCF3C41A /* Pods-RHImgPicker_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-RHImgPicker_Tests.modulemap"; sourceTree = "<group>"; };
 		8737B0E110467F8D76D92BC9A665BF76 /* Pods-RHImgPicker_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-RHImgPicker_Example-frameworks.sh"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A4B4212D1D8AB67400CFDEB6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		A4B4212F1D8AB67C00CFDEB6 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
+		A4B421311D8ABB5D00CFDEB6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		A4CCBCB91D76F92B00C8DF46 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		A4CCBCBA1D76F92B00C8DF46 /* PreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewViewController.swift; sourceTree = "<group>"; };
 		A4CCBCBB1D76F92B00C8DF46 /* RHImgPickerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RHImgPickerViewController.swift; sourceTree = "<group>"; };
-		A4CCBCBD1D76F92B00C8DF46 /* NSIndexSet+NSIndexPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSIndexSet+NSIndexPath.swift"; sourceTree = "<group>"; };
-		A4CCBCBE1D76F92B00C8DF46 /* UIButton+Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Animation.swift"; sourceTree = "<group>"; };
+		A4CCBCBD1D76F92B00C8DF46 /* NSMutableIndexSet+NSIndexPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableIndexSet+NSIndexPath.swift"; sourceTree = "<group>"; };
 		A4CCBCBF1D76F92B00C8DF46 /* UIImageView+blur.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImageView+blur.swift"; sourceTree = "<group>"; };
 		A4CCBCC01D76F92B00C8DF46 /* UIViewController+RHImgPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+RHImgPicker.swift"; sourceTree = "<group>"; };
 		A4CCBCC21D76F92B00C8DF46 /* ImgViewScaleAspect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImgViewScaleAspect.swift; sourceTree = "<group>"; };
@@ -86,8 +85,6 @@
 		A4CCBCD01D76F92B00C8DF46 /* PhotoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		A4CCBCD11D76F92B00C8DF46 /* PhotosCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosCollectionView.swift; sourceTree = "<group>"; };
 		A4CCBCD21D76F92B00C8DF46 /* RHSelectionCounterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RHSelectionCounterView.swift; sourceTree = "<group>"; };
-		A4CCBCE71D76F9CC00C8DF46 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
-		A4CCBCE91D76F9D200C8DF46 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
 		AF0FDB97249D4372C52FB626E2A722E0 /* Pods-RHImgPicker_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-RHImgPicker_Example-umbrella.h"; sourceTree = "<group>"; };
 		AFD4D3E021647DE82EB9F8EA50C7A334 /* Pods-RHImgPicker_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-RHImgPicker_Tests-dummy.m"; sourceTree = "<group>"; };
 		B40B4DC3C521952082BD4E910AE65D82 /* Pods-RHImgPicker_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-RHImgPicker_Example-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -100,7 +97,6 @@
 		C28B50A05A22689C451588DBA7481D11 /* Pods_RHImgPicker_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RHImgPicker_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C48C326CBDE718EC4079CB8D3B54CD84 /* Pods-RHImgPicker_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-RHImgPicker_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		C83DA09EF515D07DA15A268CC9C43F46 /* Pods-RHImgPicker_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-RHImgPicker_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		E861E7DE2E5D1BD9C5626E8224D49DF2 /* Pods-RHImgPicker_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-RHImgPicker_Example.release.xcconfig"; sourceTree = "<group>"; };
 		F7673B9B32A8A8F78404815AEE6B31F0 /* RHImgPicker.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = RHImgPicker.xcconfig; sourceTree = "<group>"; };
 		FE2987C55A20E106DD396E424EA952A1 /* RHImgPicker-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "RHImgPicker-dummy.m"; sourceTree = "<group>"; };
@@ -111,9 +107,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4CCBCEA1D76F9D200C8DF46 /* Photos.framework in Frameworks */,
-				A4CCBCE81D76F9CC00C8DF46 /* UIKit.framework in Frameworks */,
-				A1331FA9954714BDAB36781710D2C4CC /* Foundation.framework in Frameworks */,
+				A4B421321D8ABB5D00CFDEB6 /* Foundation.framework in Frameworks */,
+				A4B421301D8AB67C00CFDEB6 /* Photos.framework in Frameworks */,
+				A4B4212E1D8AB67400CFDEB6 /* UIKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,7 +117,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				591F4D9652E3EF34B32BC9C543794C96 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,7 +124,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E7FE631A5A9F05B65B340BC6ACBFDB5E /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,9 +169,9 @@
 		3DCAB2B7CDE207B3958B6CB957FCC758 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				A4CCBCE91D76F9D200C8DF46 /* Photos.framework */,
-				A4CCBCE71D76F9CC00C8DF46 /* UIKit.framework */,
-				CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */,
+				A4B421311D8ABB5D00CFDEB6 /* Foundation.framework */,
+				A4B4212F1D8AB67C00CFDEB6 /* Photos.framework */,
+				A4B4212D1D8AB67400CFDEB6 /* UIKit.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";
@@ -259,8 +253,7 @@
 		A4CCBCBC1D76F92B00C8DF46 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				A4CCBCBD1D76F92B00C8DF46 /* NSIndexSet+NSIndexPath.swift */,
-				A4CCBCBE1D76F92B00C8DF46 /* UIButton+Animation.swift */,
+				A4CCBCBD1D76F92B00C8DF46 /* NSMutableIndexSet+NSIndexPath.swift */,
 				A4CCBCBF1D76F92B00C8DF46 /* UIImageView+blur.swift */,
 				A4CCBCC01D76F92B00C8DF46 /* UIViewController+RHImgPicker.swift */,
 			);
@@ -299,8 +292,8 @@
 		A4CCBCCC1D76F92B00C8DF46 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				A4CCBCCD1D76F92B00C8DF46 /* AlbumTableView.swift */,
 				A4CCBCCE1D76F92B00C8DF46 /* Cells */,
+				A4CCBCCD1D76F92B00C8DF46 /* AlbumTableView.swift */,
 				A4CCBCD11D76F92B00C8DF46 /* PhotosCollectionView.swift */,
 				A4CCBCD21D76F92B00C8DF46 /* RHSelectionCounterView.swift */,
 			);
@@ -433,6 +426,14 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0700;
+				TargetAttributes = {
+					A2EB575C18D63EBA435269BCACA574F2 = {
+						LastSwiftMigration = 0800;
+					};
+					D65D1A88401EE1AEE33CD99293A6600F = {
+						LastSwiftMigration = 0800;
+					};
+				};
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -467,7 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4CCBCDF1D76F92B00C8DF46 /* PhotoCollectionViewDataSource.swift in Sources */,
-				A4CCBCD61D76F92B00C8DF46 /* NSIndexSet+NSIndexPath.swift in Sources */,
+				A4CCBCD61D76F92B00C8DF46 /* NSMutableIndexSet+NSIndexPath.swift in Sources */,
 				7A255EB68F07D4B6BB47049BC907C105 /* RHImgPicker-dummy.m in Sources */,
 				A4CCBCDD1D76F92B00C8DF46 /* RHSettings.swift in Sources */,
 				A4CCBCE61D76F92B00C8DF46 /* RHSelectionCounterView.swift in Sources */,
@@ -480,7 +481,6 @@
 				A4CCBCD51D76F92B00C8DF46 /* RHImgPickerViewController.swift in Sources */,
 				A4CCBCE41D76F92B00C8DF46 /* PhotoCell.swift in Sources */,
 				A4CCBCE11D76F92B00C8DF46 /* RHImgPickerSettings.swift in Sources */,
-				A4CCBCD71D76F92B00C8DF46 /* UIButton+Animation.swift in Sources */,
 				A4CCBCDA1D76F92B00C8DF46 /* ImgViewScaleAspect.swift in Sources */,
 				A4CCBCDE1D76F92B00C8DF46 /* AlbumTableViewDataSource.swift in Sources */,
 				A4CCBCD41D76F92B00C8DF46 /* PreviewViewController.swift in Sources */,
@@ -605,6 +605,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -615,6 +616,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C248F628C67549027771D09E46EA2137 /* Pods-RHImgPicker_Example.debug.xcconfig */;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -639,6 +641,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -668,6 +671,7 @@
 				PRODUCT_NAME = RHImgPicker;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -678,6 +682,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E861E7DE2E5D1BD9C5626E8224D49DF2 /* Pods-RHImgPicker_Example.release.xcconfig */;
 			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = NO;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -701,6 +706,7 @@
 				PRODUCT_NAME = Pods_RHImgPicker_Example;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

@@ -42,7 +42,7 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
     var photosDataSource: PhotoCollectionViewDataSource?
     
     init() {
-        super.init(frame: CGRectZero, collectionViewLayout:  RHCollectionGridViewLayout())
+        super.init(frame: CGRect.zero, collectionViewLayout:  RHCollectionGridViewLayout())
     }
 
     
@@ -56,14 +56,14 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
     }
 
     
-    func setup(frame : CGRect) {
+    func setup(_ frame : CGRect) {
     
         self.frame = frame
         self.allowsMultipleSelection = true
         self.delegate = self
         
         self.bounces = true
-        self.scrollEnabled = true
+        self.isScrollEnabled = true
         self.scrollsToTop = true
         self.alwaysBounceVertical = true
 
@@ -79,7 +79,7 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
     
     //Mark: - sync collection
     
-    private func synchronizeSelectionInCollectionView(collectionView: UICollectionView) {
+    fileprivate func synchronizeSelectionInCollectionView(_ collectionView: UICollectionView) {
         guard let photosDataSource = self.photosDataSource else {
             return
         }
@@ -87,9 +87,10 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
         // Get indexes of the selected assets
         let mutableIndexSet = NSMutableIndexSet()
         for object in photosDataSource.selections {
-            let index = photosDataSource.fetchResult.indexOfObject(object)
+            let index = photosDataSource.fetchResult.index(of: object)
             if index != NSNotFound {
-                mutableIndexSet.addIndex(index)
+                mutableIndexSet.add(index)
+                
             }
         }
         
@@ -100,7 +101,7 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
         
         // Loop through them and set them as selected in the collection view
         for indexPath in indexPaths {
-            collectionView.selectItemAtIndexPath(indexPath, animated: false, scrollPosition: .None)
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: UICollectionViewScrollPosition())
         }
         
 
@@ -111,32 +112,34 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
     
     func synchronizeCollectionView() {
 
-        UIView.setAnimationsEnabled(false)
-        
-        let collectionView = self
         
         // Reload and sync selections
-        collectionView.reloadData()
+        self.reloadData()
+        self.synchronizeSelectionInCollectionView(self)
         
-        synchronizeSelectionInCollectionView(collectionView)
         
-        UIView.setAnimationsEnabled(true)
-        
+    }
+    
+    
+    func clearSelectdCells() {
+        self.deselectVisableCellsFromCollectionViewAnimated(true)
+        self.deselectAllCellsAnimated(false)
+    
     }
 
   
-    func deselectVisableCellsFromCollectionViewAnimated(animated : Bool) {
+    fileprivate func deselectVisableCellsFromCollectionViewAnimated(_ animated : Bool) {
     
         // update cell selection String
-        let cells = self.visibleCells()
+        let cells = self.visibleCells
         
         
-        UIView.animateWithDuration(0.15) { 
+        UIView.animate(withDuration: 0.15, animations: { 
             
             for cell in  cells {
                 if let photoCell = cell as? PhotoCell {
-                    if photoCell.selected {
-                        self.deselectItemAtIndexPath(self.indexPathForCell(photoCell)!, animated: animated)
+                    if photoCell.isSelected {
+                        self.deselectItem(at: self.indexPath(for: photoCell)!, animated: animated)
                         photoCell.selectionString = ""
                     }
                     else {
@@ -145,7 +148,7 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
                 }
             }
 
-        }
+        }) 
         
         
         
@@ -153,26 +156,29 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
         
     }
     
-    func deselectAllCellsAnimated(animated : Bool) {
+    fileprivate func deselectAllCellsAnimated(_ animated : Bool) {
         guard let photosDataSource = self.photosDataSource else {
             return
         }
         
+        
+        
         // Get indexes of the selected assets
         let mutableIndexSet = NSMutableIndexSet()
         for object in photosDataSource.selections {
-            let index = photosDataSource.fetchResult.indexOfObject(object)
+            let index = photosDataSource.fetchResult.index(of: object)
             if index != NSNotFound {
-                mutableIndexSet.addIndex(index)
+                mutableIndexSet.add(index)
             }
         }
         
         // Convert into index paths
         let indexPaths = mutableIndexSet.rh_indexPathsForSection(0)
         
+        
         // Loop through them and set them as selected in the collection view
         for indexPath in indexPaths {
-            self.deselectItemAtIndexPath(indexPath, animated: animated)
+            self.deselectItem(at: indexPath, animated: animated)
         }
         
         
@@ -182,20 +188,26 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
     
     //MARK: - UICollectionViewDelegate
 
-    func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         guard let photosDataSource = self.photosDataSource, let settings = photosDataSource.settings else {
             return false
         }
         
-       
         
-        if (collectionView.userInteractionEnabled && photosDataSource.selections.count < settings.maxNumberOfSelections) {
-            return true
-        } else if (collectionView.userInteractionEnabled && settings.maxNumberOfSelections == 1 && photosDataSource.selections.count == 1) {
+        
+        if (collectionView.isUserInteractionEnabled && photosDataSource.selections.count < settings.maxNumberOfSelections) {
             
-            deselectVisableCellsFromCollectionViewAnimated(true)
-            deselectAllCellsAnimated(false)
+            
+            
+            return true
+        } else if (collectionView.isUserInteractionEnabled && settings.maxNumberOfSelections == 1 && photosDataSource.selections.count == 1) {
+            
+            self.deselectVisableCellsFromCollectionViewAnimated(true)
+            self.deselectAllCellsAnimated(false)
             photosDataSource.selections.removeAll()
+            
+         
+            
             
             return true
         } else {
@@ -207,16 +219,19 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
     
     
     
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        guard let photosDataSource = self.photosDataSource  , let settings = photosDataSource.settings , let cell = collectionView.cellForItemAtIndexPath(indexPath) as? PhotoCell, let asset = photosDataSource.fetchResult.objectAtIndex(indexPath.row) as? PHAsset else {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let photosDataSource = self.photosDataSource  , let settings = photosDataSource.settings , let cell = collectionView.cellForItem(at: indexPath) as? PhotoCell, let asset = photosDataSource.fetchResult.object(at: (indexPath as NSIndexPath).row) as? PHAsset else {
             return
         }
         
         
         // Select asset if not already selected
-        photosDataSource.selections.append(asset)
+        if !photosDataSource.selections.contains(asset) {
+            photosDataSource.selections.append(asset)
+        }
         
         
+        // delegate call (Synchronous)
         if let photosCollectionViewDelegate = self.photosCollectionViewDelegate {
             photosCollectionViewDelegate.photosCollectionViewDelegateDidSelect(asset)
         }
@@ -233,22 +248,23 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
     }
     
     
-    func collectionView(collectionView: UICollectionView, shouldDeselectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-        
+    
+    func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
         return true
-        
     }
     
     
-    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        guard let photosDataSource = self.photosDataSource  , let asset = photosDataSource.fetchResult.objectAtIndex(indexPath.row) as? PHAsset, let index = photosDataSource.selections.indexOf(asset) , let photocell = collectionView.cellForItemAtIndexPath(indexPath) as? PhotoCell  else {
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let photosDataSource = self.photosDataSource  , let asset = photosDataSource.fetchResult.object(at: (indexPath as NSIndexPath).row) as? PHAsset, let index = photosDataSource.selections.index(of: asset) , let photocell = collectionView.cellForItem(at: indexPath) as? PhotoCell  else {
             return
         }
         
         // Deselect asset
-        photosDataSource.selections.removeAtIndex(index)
+        photosDataSource.selections.remove(at: index)
         
         
+        
+        // delegate call (Synchronous)
         if let photosCollectionViewDelegate = self.photosCollectionViewDelegate {
         
             photosCollectionViewDelegate.photosCollectionViewDelegateDidDeselect(asset)
@@ -257,50 +273,50 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
         
         
         
-        // update cell selection String
-        if let curentDeselectedItemIndex : Int = Int(photocell.selectionString) {
-            
-            let maxSelections = photosDataSource.selections.count
-
-            if curentDeselectedItemIndex <= maxSelections  {
+        // update visible cell selection String if no selectionCharacter define
+        if RHSettings.sharedInstance.selectionCharacter == nil {
+            if let curentDeselectedItemIndex : Int = Int(photocell.selectionString) {
                 
-                let cells = collectionView.visibleCells()
+                let maxSelections = photosDataSource.selections.count
                 
-                for cell in  cells {
+                if curentDeselectedItemIndex <= maxSelections  {
                     
-                    if let photoCell = cell as? PhotoCell {
+                    let cells = collectionView.visibleCells
+                    
+                    for cell in  cells {
                         
-                        if photoCell.selected {
+                        if let photoCell = cell as? PhotoCell {
                             
-                            if let cellStringAsInt = Int(photoCell.selectionString) {
+                            if photoCell.isSelected {
                                 
-                                if cellStringAsInt > curentDeselectedItemIndex {
+                                if let cellStringAsInt = Int(photoCell.selectionString) {
                                     
-                                    photoCell.updata(max(0, cellStringAsInt-1))
+                                    if cellStringAsInt > curentDeselectedItemIndex {
+                                        
+                                        photoCell.updata(max(0, cellStringAsInt-1))
+                                    }
+                                    
                                 }
                                 
                             }
                             
                         }
-                        
                     }
                 }
             }
+        
         }
         
         
-        // Reload selected cells to update their selection number
-        UIView.setAnimationsEnabled(false)
-        synchronizeSelectionInCollectionView(collectionView)
-        UIView.setAnimationsEnabled(true)
-        
+       
         
     }
     
     
     // MARK: - scrollView
 
-    func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+    //collection view schuld scroll to top on statusBar tap
+    func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
         return true
     }
     
@@ -308,7 +324,7 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
     
     
     // MARK: - Traits
-    override func traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         guard let photosDataSource = self.photosDataSource  , let settings = photosDataSource.settings else {
             return
         }
@@ -316,12 +332,12 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
         super.traitCollectionDidChange(previousTraitCollection)
         
         if let collectionViewFlowLayout = collectionViewLayout as? RHCollectionGridViewLayout {
-            let itemSpacing: CGFloat = 2.0
-            let cellsPerRow = settings.cellsPerRow(verticalSize: traitCollection.verticalSizeClass, horizontalSize: traitCollection.horizontalSizeClass)
             
+            // set image size on collection view
+            let itemSpacing: CGFloat = 2.0
+            let cellsPerRow = settings.cellsPerRow(traitCollection.verticalSizeClass, traitCollection.horizontalSizeClass)
             collectionViewFlowLayout.itemSpacing = itemSpacing
             collectionViewFlowLayout.itemsPerRow = cellsPerRow
-            
             photosDataSource.imageSize = collectionViewFlowLayout.itemSize
             
             
@@ -338,8 +354,8 @@ class PhotosCollectionView: UICollectionView, UICollectionViewDelegate {
 
 protocol PhotosCollectionViewDelegate {
     
-    func photosCollectionViewDelegateDidSelect(asset : PHAsset)
-    func photosCollectionViewDelegateDidDeselect(asset : PHAsset)
+    func photosCollectionViewDelegateDidSelect(_ asset : PHAsset)
+    func photosCollectionViewDelegateDidDeselect(_ asset : PHAsset)
     
 }
 

@@ -13,31 +13,15 @@ import UIKit
 
 extension UIImageView{
     
-    func blurImage(style: UIBlurEffectStyle)
+    func blurImage(_ style: UIBlurEffectStyle)
     {
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         
         blurEffectView.frame = self.bounds
         
-        blurEffectView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight] // for supporting device rotation
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight] // for supporting device rotation
         self.addSubview(blurEffectView)
     }
 }
 
-/*
-
-extension UIView {
-    
-    func blurImage(style: UIBlurEffectStyle)
-    {
-        let blurEffect = UIBlurEffect(style: style)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        
-        blurEffectView.frame = self.bounds
-        
-        blurEffectView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight] // for supporting device rotation
-        self.addSubview(blurEffectView)
-    }
-}
-*/

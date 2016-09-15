@@ -34,38 +34,44 @@ final class PhotoCollectionViewDataSource : NSObject, UICollectionViewDataSource
 
     
     
-    class func registerCellIdentifiersForCollectionView(collectionView: UICollectionView?) {
-        collectionView?.registerClass(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.IDENTIFIER)
+    class func registerCellIdentifiersForCollectionView(_ collectionView: UICollectionView?) {
+        collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: PhotoCell.IDENTIFIER)
     }
     
     
     
     
     var selections = [PHAsset]()
-    var fetchResult: PHFetchResult
+    var fetchResult: PHFetchResult<AnyObject>
     
     
-    private let photosManager = PHCachingImageManager.defaultManager()
-    private let imageContentMode: PHImageContentMode = .AspectFill
+    fileprivate let photosManager = PHCachingImageManager.default()
+    fileprivate let imageContentMode: PHImageContentMode = .aspectFill
 
     
     let settings: RHImgPickerSettings?
-    var imageSize: CGSize = CGSizeZero
+    var imageSize: CGSize = CGSize.zero
   
     
     
-    init(fetchResult: PHFetchResult, selections: PHFetchResult? = nil, settings: RHImgPickerSettings?) {
+    init(fetchResult: PHFetchResult<AnyObject>, selections: PHFetchResult<AnyObject>? = nil, settings: RHImgPickerSettings?) {
         self.fetchResult = fetchResult
         self.settings = settings
         
         
         if let selections = selections {
             var selectionsArray = [PHAsset]()
-            selections.enumerateObjectsUsingBlock { (asset, idx, stop) -> Void in
+           /* selections.enumerateObjects { (asset, idx, stop) -> Void in
                 if let asset = asset as? PHAsset {
                     selectionsArray.append(asset)
                 }
             }
+            */
+            selections.enumerateObjects({ (asset, idx, stop) -> Void in
+                if let asset = asset as? PHAsset {
+                    selectionsArray.append(asset)
+                }
+            })
             self.selections = selectionsArray
         }
         
@@ -80,21 +86,21 @@ final class PhotoCollectionViewDataSource : NSObject, UICollectionViewDataSource
     //MARK: UICollectionViewDataSource
     
     
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         return fetchResult.count
         
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         UIView.setAnimationsEnabled(false)
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(PhotoCell.IDENTIFIER, forIndexPath: indexPath) as! PhotoCell
-        cell.setup()
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoCell.IDENTIFIER, for: indexPath) as! PhotoCell
+        cell.layoutCell()
         
         
         
@@ -103,20 +109,17 @@ final class PhotoCollectionViewDataSource : NSObject, UICollectionViewDataSource
             photosManager.cancelImageRequest(PHImageRequestID(cell.tag))
         }
         
-        if let asset = fetchResult[indexPath.row] as? PHAsset {
+        if let asset = fetchResult[(indexPath as NSIndexPath).row] as? PHAsset {
             cell.asset = asset
             
             
-
-            
-            
             // Request image
-            cell.tag = Int(photosManager.requestImageForAsset(asset, targetSize: imageSize, contentMode: imageContentMode, options: nil) { (result, _) in
+            cell.tag = Int(photosManager.requestImage(for: asset, targetSize: imageSize, contentMode: imageContentMode, options: nil) { (result, _) in
                     cell.imageView.image = result
                 })
             
             // Set selection number
-            if let asset = fetchResult[indexPath.row] as? PHAsset, let index = selections.indexOf(asset) {
+            if let asset = fetchResult[(indexPath as NSIndexPath).row] as? PHAsset, let index = selections.index(of: asset) {
                 if let character = settings?.selectionCharacter {
                     
                     cell.selectionString = String(character)
@@ -133,9 +136,9 @@ final class PhotoCollectionViewDataSource : NSObject, UICollectionViewDataSource
                    
                 }
                 
-                cell.selected = true
+                cell.isSelected = true
             } else {
-                cell.selected = false
+                cell.isSelected = false
             }
         }
         
